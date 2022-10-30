@@ -12,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Hello World" />
+        android:layout_margin="30dp"
+        android:text="Cockmate"
+        android:textSize="40dp" />
 
     <Button
         android:id="@+id/login_button"
