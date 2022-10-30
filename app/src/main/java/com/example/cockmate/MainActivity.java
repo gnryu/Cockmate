@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    // test ...
+
     Button loginBtn, joinBtn;
 
     @Override
