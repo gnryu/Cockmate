@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "767185677793",
+    "project_id": "cockmate-44510",
+    "storage_bucket": "cockmate-44510.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767185677793:android:3a9dd7cf170b620c14b6a0",
+        "android_client_info": {
+          "package_name": "com.example.cockmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767185677793-pnnh07mm9s2adkm5glj7r7gudvmdtdbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzuxjTcL9hZPK1fX1JM-hoTdkUHQkUKYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767185677793-pnnh07mm9s2adkm5glj7r7gudvmdtdbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/post_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color1"
+        android:theme="?attr/actionBarTheme"
+        app:title="글쓰기"
+        app:titleCentered="true"
+        app:titleTextColor="@color/black"
+        android:elevation="4dp">
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="제목"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"/>
+
+        <EditText
+            android:id="@+id/post_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+
+            />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/post_content"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:hint="내용을 입력해주세요"
+        android:gravity="left"
+        android:background="@drawable/edittext_background"
+        android:layout_margin="10dp"
+        android:padding="7dp"/>
+
+    <Button
+        android:id="@+id/getImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사진 첨부하기"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:background="@drawable/edittext_background"
+        android:layout_margin="10dp"
+        android:padding="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="사진은 한 번에 최대 10개까지 선택 가능합니다."
+        android:textColor="#3C3C3C"
+        android:textSize="12dp"
+        android:layout_marginLeft="10dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        android:layout_gravity="left"/>
+
+
+</LinearLayout>
