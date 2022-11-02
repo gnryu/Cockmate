@@ -1,10 +1,14 @@
-package com.example.cockmate;
+package com.example.cockmate.util;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -12,7 +16,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import com.example.cockmate.R;
+import com.example.cockmate.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class JoinActivity extends AppCompatActivity {
 
@@ -35,10 +43,10 @@ public class JoinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Create Account");
-        actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼
-        actionBar.setDisplayShowHomeEnabled(true); // 홈 아이콘
+        // 툴바생성
+        Toolbar toolbar = findViewById(R.id.join_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -68,19 +76,21 @@ public class JoinActivity extends AppCompatActivity {
                             if(task.isSuccessful()) {
                                 dialog.dismiss();
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
+
                                 String email = user.getEmail();
                                 String uid = user.getUid();
                                 String name = mName.getText().toString().trim();
 
-                                // hash map 테이블을 파이어베이스 데이터베이스에 저장
-                                HashMap<Object, String> hashMap = new HashMap<>();
-                                hashMap.put("uid", uid);
-                                hashMap.put("email", email);
-                                hashMap.put("name", name);
 
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference reference = database.getReference("Users");
-                                reference.child(uid).setValue(hashMap);
+                                // 파이어베이스 실시간 데이터베이스에 저장하기
+                                DatabaseReference mDBReference = FirebaseDatabase.getInstance().getReference();
+                                HashMap<String, Object> userUpdates = new HashMap<>();
+                                UserModel userModel = new UserModel(name, email, uid);
+                                Map<String, Object> userValue = userModel.toMap();
+
+                                userUpdates.put("/Users/" + uid, userValue);
+                                mDBReference.updateChildren(userUpdates);
+
 
                                 // 가입이 이루어졌을 시 가입 화면을 빠져나감 -> 로그인 화면으로 이동
                                 Intent intent = new Intent(JoinActivity.this, LoginActivity.class);
@@ -102,8 +112,32 @@ public class JoinActivity extends AppCompatActivity {
         });
     }
 
-    public boolean onSupportNavigateUp() {
-        onBackPressed(); // 뒤로가기 버튼이 눌렸을 시
-        return super.onSupportNavigateUp(); // 뒤로가기 버튼
+    // 툴바 메뉴 선택시
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar의 back키 눌렀을 때 동작
+                // 액티비티 이동
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
+
+    // edit text 외 다른 영역 터치시 키보드 숨기기
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View view = getCurrentFocus();
+        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+            int scrcoords[] = new int[2];
+            view.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + view.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + view.getTop() - scrcoords[1];
+            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
+                ((InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
 }
