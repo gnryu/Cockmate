@@ -1,52 +1,55 @@
 package com.example.cockmate.util;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.example.cockmate.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button loginBtn, joinBtn, communityBtn;
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private MainMenuHomeFragment fragmentHome = new MainMenuHomeFragment();
+    private MainMenuCommunityFragment fragmentCommunity = new MainMenuCommunityFragment();
+    private MainMenuBookmarkFragment fragmentBookmark = new MainMenuBookmarkFragment();
+    private MainMenuInfoFragment fragmentInfo = new MainMenuInfoFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loginBtn = findViewById(R.id.login_button);
-        joinBtn = findViewById(R.id.join_button);
-        communityBtn = findViewById(R.id.community_button);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.menu_frame_layout, fragmentHome).commitAllowingStateLoss();
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.menu_bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
+    }
 
+    class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+            switch (menuItem.getItemId()) {
+                case R.id.menu_home:
+                    transaction.replace(R.id.menu_frame_layout, fragmentHome).commitAllowingStateLoss();
+                    break;
+                case R.id.menu_community:
+                    transaction.replace(R.id.menu_frame_layout, fragmentCommunity).commitAllowingStateLoss();
+                    break;
+                case R.id.menu_bookmark:
+                    transaction.replace(R.id.menu_frame_layout, fragmentBookmark).commitAllowingStateLoss();
+                    break;
+                case R.id.menu_mInfo:
+                    transaction.replace(R.id.menu_frame_layout, fragmentInfo).commitAllowingStateLoss();
+                    break;
             }
-        });
-
-        joinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, JoinActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
-        communityBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, BoardActivity.class);
-                startActivity(intent);
-
-            }
-        });
+            return true;
+        }
     }
 }
