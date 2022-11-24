@@ -39,7 +39,6 @@ public class MainMenuInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), JoinActivity.class);
-//                Intent intent = new Intent(MainActivity.this, JoinActivity.class);
                 startActivity(intent);
 
             }
