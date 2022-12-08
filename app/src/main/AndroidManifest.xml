@@ -42,6 +42,12 @@
         <activity
             android:name=".util.PostActivity"
             android:exported="false" />
+        <activity
+            android:name=".util.DetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.CameraActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

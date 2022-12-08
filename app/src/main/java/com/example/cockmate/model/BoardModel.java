@@ -11,16 +11,15 @@ public class BoardModel {
     public String boardContent;
     public String boardImageUrl;
     public String boardCategory;
-    public String boardDate;
+    public long boardDate;
     public int resourceId;
+    public String boardEmail;
+    public String boardRealDate;
 
-    public BoardModel( String title, String category, String content, String date, String name) {
-        this.boardTitle = title;
-        this.boardCategory = category;
-        this.boardContent = content;
-        this.boardDate = date;
-        this.boardName = name;
+    public BoardModel() {
     }
+
+
 
     public Map<String, Object> toMap(){
         HashMap<String, Object> result = new HashMap<>();
@@ -30,6 +29,8 @@ public class BoardModel {
         result.put("Categoty", boardCategory);
         result.put("Date", boardDate);
         result.put("Name", boardName);
+        result.put("Email", boardEmail);
+        result.put("RealDate", boardRealDate);
 
         return result;
     }
@@ -50,9 +51,13 @@ public class BoardModel {
         return boardContent;
     }
 
-    public String getDate() {
+    public long getDate() {
         return boardDate;
     }
+
+    public String getEmail() {return boardEmail;}
+
+    public String getRealDate() {return boardRealDate;}
 
     public void setCategory(String category) {
         this.boardCategory = category;
@@ -70,7 +75,11 @@ public class BoardModel {
         this.boardContent = content;
     }
 
-    public void setDate (String date) {
+    public void setDate (long date) {
         this.boardDate = date;
     }
+
+    public void setEmail (String email) {this.boardEmail = email;}
+
+    public void setRealDate (String realDate) {this.boardRealDate = realDate;}
 }

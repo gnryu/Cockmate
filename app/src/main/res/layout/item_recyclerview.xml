@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp">
+        android:padding="10dp">
 
         <!--제목-->
         <TextView
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="제목"
             android:textSize="20sp"
-            android:textColor="#000"/>
+            android:textColor="@color/black"/>
 
         <!--사진-->
         <ImageView
@@ -36,10 +36,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="카테고리"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:textSize="12sp"
         android:textColor="#444"
         android:maxLines="1"/>
+
+    <!--날짜-->
+    <TextView
+        android:id="@+id/item_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="날짜"
+        android:layout_marginLeft="10dp"
+        android:textSize="12sp"
+        android:textColor="#444"
+        android:maxLines="1"
+        android:layout_marginBottom="10dp"/>
 
     <View
         android:layout_width="match_parent"
