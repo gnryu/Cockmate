@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             Log.d("Login", "로그인 성공");
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
                             startActivity(intent);
                         } else {
                             Log.d("Login", "로그인 실패");

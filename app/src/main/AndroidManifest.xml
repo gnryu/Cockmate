@@ -4,14 +4,14 @@
     package="com.example.cockmate">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.hardware.camera"
-        android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.hardware.camera" android:required="true"/>
+
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -20,11 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".util.CameraActivity"
-            android:exported="false" />
         <activity
             android:name=".util.JoinActivity"
             android:exported="false" />
@@ -45,6 +41,12 @@
             android:exported="false" />
         <activity
             android:name=".util.PostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.DetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.CameraActivity"
             android:exported="false" />
     </application>
 

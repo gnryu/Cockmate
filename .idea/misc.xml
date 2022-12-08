@@ -5,12 +5,19 @@
       <map>
         <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/drawable/edittext_background.xml" value="0.1" />
         <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/activity_board.xml" value="0.1" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/activity_camera.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/activity_detail.xml" value="0.10943396226415095" />
         <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/activity_join.xml" value="0.1" />
-        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/activity_login.xml" value="0.17027027027027028" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/activity_login.xml" value="0.15760869565217392" />
         <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/activity_post.xml" value="0.3333333333333333" />
-        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/item_recyclerview.xml" value="0.11944444444444445" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/activity_post.xml" value="0.25838926174496646" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/fragment_main_menu_bookmark.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/fragment_main_menu_community.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/fragment_main_menu_home.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/fragment_main_menu_info.xml" value="0.17249240121580547" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/item_recyclerview.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/layout/multi_image_item.xml" value="0.2056159420289855" />
+        <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/menu/main_menu_bottom.xml" value="0.21388888888888888" />
         <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/menu/post_bar.xml" value="0.1" />
         <entry key="..\:/Users/im210/CockProject/Cockmate/app/src/main/res/menu/post_complete_bar.xml" value="0.35520833333333335" />
         <entry key="..\:/Users/im210/Document/Cockmate-main/app/src/main/res/layout/activity_board.xml" value="0.20652173913043478" />
@@ -18,23 +25,10 @@
         <entry key="..\:/Users/im210/Document/Cockmate-main/app/src/main/res/layout/activity_login.xml" value="0.3515625" />
         <entry key="..\:/Users/im210/Document/Cockmate-main/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/im210/Document/Cockmate-main/app/src/main/res/layout/item_recyclerview.xml" value="0.3333333333333333" />
-        <entry key="app/src/main/res/drawable/menu_item_color.xml" value="0.1055" />
-        <entry key="app/src/main/res/layout/activity_board.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_camera.xml" value="0.14792299898682879" />
-        <entry key="app/src/main/res/layout/activity_join.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_join.xml" value="0.27898550724637683" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.27898550724637683" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.17083333333333334" />
-        <entry key="app/src/main/res/layout/activity_post.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_second.xml" value="0.15" />
-        <entry key="app/src/main/res/layout/fragment_main_menu_bookmark.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_main_menu_community.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_main_menu_home.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_main_menu_info.xml" value="0.16661834716796875" />
-        <entry key="app/src/main/res/layout/item_recyclerview.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/multi_image_item.xml" value="0.15476190476190477" />
-        <entry key="app/src/main/res/menu/main_menu_bottom.xml" value="0.15520833333333334" />
-        <entry key="app/src/main/res/menu/post_bar.xml" value="0.37087097167968747" />
-        <entry key="app/src/main/res/menu/post_complete_bar.xml" value="0.37832336425781254" />
       </map>
     </option>
   </component>

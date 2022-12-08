@@ -4,11 +4,13 @@ import android.Manifest;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.service.autofill.UserData;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,20 +32,34 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cockmate.R;
 import com.example.cockmate.adapter.MultiImageAdapter;
+import com.example.cockmate.adapter.MyRecyclerAdapter;
 import com.example.cockmate.model.BoardModel;
 import com.example.cockmate.model.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PostActivity extends AppCompatActivity {
@@ -54,6 +70,12 @@ public class PostActivity extends AppCompatActivity {
 
     private static final String TAG = "PostActivity";
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference mDBReference;
+    private SharedPreferences preferences;
+    private MyRecyclerAdapter mRecyclerAdapter;
+    private RecyclerView mRecyclerView;
+
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     EditText Title, Content;
     String postTitle, postContent, mName;
@@ -189,6 +211,10 @@ public class PostActivity extends AppCompatActivity {
                 else {
                     saveData();
                     Toast.makeText(getApplicationContext(), "등록 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                    // 리사이클러뷰 저장 및 새로고침
+                    //mRecyclerAdapter.notifyDataSetChanged();
+                    //mRecyclerView.invalidate();
+                    finish();
                 }
                 return true;
             }
@@ -197,23 +223,43 @@ public class PostActivity extends AppCompatActivity {
     }
 
     public void saveData(){
+        preferences = getSharedPreferences("UserName", MODE_PRIVATE);
+
         //BoardModel boardModel = new BoardModel();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         String email = user.getEmail();
+        //Log.e(TAG, email);
         String uid = user.getUid();
         postTitle = Title.getText().toString();
         postContent = Content.getText().toString();
         String category = "main";
-        String date = getTime();
+        long date = System.currentTimeMillis();
+        String realDate = getTime();
 
-        DatabaseReference mDBReference = FirebaseDatabase.getInstance().getReference();
-        mDBReference.child("User").child(uid).child("Name").addValueEventListener(new ValueEventListener() {
+
+
+
+        // SharedPreference 이용해서 저장된 값 불러오기
+        String mName = preferences.getString("userName", "없음");
+        Log.e(TAG, mName);
+
+
+        // 파이어베이스에서 같은 uid의 이름 데이터 가져오기
+        mDBReference = FirebaseDatabase.getInstance().getReference();
+        mDBReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue(String.class);
-                mName = value;
+                String name = dataSnapshot.child("Name").getValue(String.class);
+                if (name != null){
+                    //Log.d(TAG, name);
+
+                    // SharedPreference 사용해서 name 임시 저장하기
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("userName", name);
+                    editor.commit();
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -221,14 +267,49 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        String name = mName;
 
-        HashMap<String, Object> boardUpdates = new HashMap<>();
-        BoardModel boardModel = new BoardModel(postTitle, category, postContent, date, mName);
-        Map<String, Object> boardValue = boardModel.toMap();
 
-        boardUpdates.put("/Main_Board/" + uid, boardValue);
-        mDBReference.updateChildren(boardUpdates);
+
+
+
+        // 파이어베이스에 저장하기
+        //HashMap<String, Object> boardUpdates = new HashMap<>();
+        //BoardModel boardModel = new BoardModel(postTitle, category, postContent, date, mName, email);
+        //Map<String, Object> boardValue = boardModel.toMap();
+
+        Map<String, Object> board = new HashMap<>();
+        board.put("Title", postTitle);
+        board.put("Category", "main");
+        board.put("Content", postContent);
+        board.put("Date", date);
+        board.put("Name", mName);
+        board.put("Email", email);
+        board.put("RealDate", realDate);
+
+
+        // B
+
+        db.collection("Main_Board")
+                .add(board)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "저장 성공");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "저장 실패");
+                    }
+                });
+
+
+
+        //boardUpdates.put("/Main_Board/" + uid, boardValue);
+        //mDBReference.child("Main_Board").child(uid).setValue(boardValue);
+        //mDBReference.updateChildren(boardUpdates);
+        //mDBReference.
 
     }
 
@@ -257,4 +338,8 @@ public class PostActivity extends AppCompatActivity {
             Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
         }
     }
+
+
 }
+
+
