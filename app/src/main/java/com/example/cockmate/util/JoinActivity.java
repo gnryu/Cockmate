@@ -21,12 +21,16 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.cockmate.R;
 import com.example.cockmate.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +41,8 @@ public class JoinActivity extends AppCompatActivity {
     EditText mName, mEmailText, mPasswordText, mPasswordCheckText;
     Button mJoinBtn;
     private FirebaseAuth firebaseAuth;
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,7 @@ public class JoinActivity extends AppCompatActivity {
         mPasswordCheckText = findViewById(R.id.check_password);
         mName = findViewById(R.id.user_name);
         mJoinBtn = findViewById(R.id.join_btn);
+
 
         mJoinBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -82,6 +89,30 @@ public class JoinActivity extends AppCompatActivity {
                                 String name = mName.getText().toString().trim();
 
 
+                                // UserModel에 값 저장하기
+                                Map<String, Object> userData = new HashMap<>();
+                                userData.put("Email", email);
+                                userData.put("Uid", uid);
+                                userData.put("Name", name);
+
+                                // 파이어베이스 firestore에 저장하기
+                                db.collection("Auth")
+                                        .add(userData)
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                Log.d(TAG, "저장 성공");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e(TAG, "저장 실패");
+                                            }
+                                        });
+
+
+
                                 // 파이어베이스 실시간 데이터베이스에 저장하기
                                 DatabaseReference mDBReference = FirebaseDatabase.getInstance().getReference();
                                 HashMap<String, Object> userUpdates = new HashMap<>();
@@ -90,6 +121,8 @@ public class JoinActivity extends AppCompatActivity {
 
                                 userUpdates.put("/Users/" + uid, userValue);
                                 mDBReference.updateChildren(userUpdates);
+
+
 
 
                                 // 가입이 이루어졌을 시 가입 화면을 빠져나감 -> 로그인 화면으로 이동

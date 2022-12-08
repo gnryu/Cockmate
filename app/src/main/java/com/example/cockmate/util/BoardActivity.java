@@ -1,13 +1,19 @@
 package com.example.cockmate.util;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Adapter;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,16 +23,45 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cockmate.R;
 import com.example.cockmate.adapter.MyRecyclerAdapter;
 import com.example.cockmate.model.BoardModel;
+import com.example.cockmate.model.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class BoardActivity extends AppCompatActivity {
 
+    private static final String TAG = "BoardActivity";
+
     private ArrayList<BoardModel> mBoardModel;
-    private ArrayList<BoardModel> mfriendItems;
-    private MyRecyclerAdapter mRecyclerAdapter;
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager linearLayoutManager;
+    private MyRecyclerAdapter mRecyclerAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private DatabaseReference mDBReference;
+    private FirebaseAuth firebaseAuth;
+    ProgressDialog progressDialog;
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -34,50 +69,90 @@ public class BoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Fetching Data...");
+        progressDialog.show();
+
         // 툴바생성
         Toolbar toolbar = findViewById(R.id.board_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //뒤로가기
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView); // 리사이클러뷰 초기화
-
-        //linearLayoutManager = new LinearLayoutManager(this); // 레이아웃 매니저
-        //mRecyclerView.setLayoutManager(linearLayoutManager); // 리사이클러뷰에 set해줌
-
-        mRecyclerAdapter =  new MyRecyclerAdapter();
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //mRecyclerView.setAdapter((RecyclerView.Adapter) mRecyclerAdapter);
+
+        mBoardModel = new ArrayList<BoardModel>();
+        EventChangeListener();
 
 
-        /*
-        mBoardModel = new ArrayList<>(); // 어댑터 선언
-        mRecyclerAdapter = new MyRecyclerAdapter(mBoardModel);
-
-        mRecyclerAdapter =  new MyRecyclerAdapter();
-
-        mRecyclerView.setAdapter((RecyclerView.Adapter) mRecyclerAdapter);
 
 
-         */
-
-
-        load();
     }
 
-    void load(){
-        mfriendItems = new ArrayList<>();
 
-        for(int i=0;i<10;i++){
-            if(i%2==0)
-                mfriendItems.add(new BoardModel("f",i+"번째 사람",i+"번째 카테고리", "1", "1"));
-            else
-                mfriendItems.add(new BoardModel("f",i+"번째 사람",i+"번째 카테고리", "1", "1"));
+    // Firestore에서 데이터 불러오기
+    private void EventChangeListener() {
 
-        }
-        mRecyclerAdapter.setItemList(mfriendItems);
+        // 날짜 최신순으로 정렬
+        db.collection("Main_Board").orderBy("Date", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot ds : queryDocumentSnapshots){
+
+                            // BoardModel에 각각 저장
+                            BoardModel bmodel = ds.toObject(BoardModel.class);
+                            bmodel.boardEmail = (String) ds.get("Email");
+                            bmodel.boardCategory = (String) ds.get("Category");
+                            bmodel.boardRealDate = (String) ds.get("RealDate");
+                            bmodel.boardContent = (String) ds.get("Content");
+                            bmodel.boardName = (String) ds.get("Name");
+                            bmodel.boardTitle = (String) ds.get("Title");
+
+                            mBoardModel.add(bmodel);
+                            //mRecyclerAdapter.updateReceiptsList(mBoardModel);
+
+
+                            //mRecyclerAdapter.notifyDataSetChanged();
+                            if(progressDialog.isShowing())
+                                progressDialog.dismiss();
+
+
+
+                            //mBoardModel.add((BoardModel) boardData);
+                            //Log.e(TAG, b_email + b_category + b_realdate + b_content + b_name + b_title);
+                        }
+                        //mRecyclerAdapter.updateReceiptsList(mBoardModel);
+                        mRecyclerAdapter = new MyRecyclerAdapter(BoardActivity.this, mBoardModel);
+
+
+                        // 리사이클러뷰에 데이터 전달
+                        mRecyclerView.setAdapter(mRecyclerAdapter);
+                        //mRecyclerAdapter.notifyDataSetChanged();
+                        mRecyclerAdapter.setItemList(mBoardModel);
+
+                        //mRecyclerView.invalidate();
+                        //mRecyclerView.getAdapter().notifyDataSetChanged();
+
+                    }
+                });
+
     }
+
+
+    public void OnStart(){
+        super.onStart();
+        setContentView(R.layout.activity_board);
+
+
+    }
+
+
+
 
     // 툴바 메뉴 불러오기
 

@@ -27,4 +27,12 @@ public class UserModel {
 
         return result;
     }
+
+    public void setName(String name){this.userName = name;}
+    public void setEmail(String email) {this.userEmail = email;}
+    public void setUserId(String uid) {this.userId = uid;}
+
+    public String getName() {return userName;}
+    public String getEmail() {return userEmail;}
+    public String getUid() {return userId;}
 }
