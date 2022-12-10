@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,9 +31,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.loader.content.CursorLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.cockmate.R;
 import com.example.cockmate.adapter.MultiImageAdapter;
 import com.example.cockmate.adapter.MyRecyclerAdapter;
@@ -54,7 +60,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,7 +77,7 @@ public class PostActivity extends AppCompatActivity {
 
     long mNow;
     Date mDate;
-    SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
     private static final String TAG = "PostActivity";
     private FirebaseAuth firebaseAuth;
@@ -75,15 +86,30 @@ public class PostActivity extends AppCompatActivity {
     private MyRecyclerAdapter mRecyclerAdapter;
     private RecyclerView mRecyclerView;
 
+
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     EditText Title, Content;
     String postTitle, postContent, mName;
+    ImageView Image;
+    Uri selectedUri;
+    private String imageUrl="";
+    private Bitmap bm;
+    private String email;
+    private FirebaseStorage mstorage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = mstorage.getReference();
+    private DocumentReference documentRef;
 
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
 
     RecyclerView recyclerView;  // 이미지를 보여줄 리사이클러뷰
     MultiImageAdapter adapter;  // 리사이클러뷰에 적용시킬 어댑터
+
+    private File tempFile;
+    Bitmap originalBm;
+
+    public PostActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +123,12 @@ public class PostActivity extends AppCompatActivity {
 
         Title = findViewById(R.id.post_title);
         Content = findViewById(R.id.post_content);
+        Image = findViewById(R.id.post_image);
+
+
+        // 게시글의 고유 Id 생성
+        documentRef = db.collection("Main_Board").document();
+
 
 
         // 앨범으로 이동하는 버튼
@@ -110,8 +142,9 @@ public class PostActivity extends AppCompatActivity {
                     if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         Log.d(TAG, "권한 설정 완료");
                         Intent intent = new Intent(Intent.ACTION_PICK);
+                        //intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
                         intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(intent, 2222);
                     }
@@ -130,54 +163,64 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
+    //절대경로를 구한다.
+    private String getRealPathFromUri(Uri uri)
+    {
+        String[] proj=  {MediaStore.Images.Media.DATA};
+        CursorLoader cursorLoader = new CursorLoader(this,uri,proj,null,null,null);
+        Cursor cursor = cursorLoader.loadInBackground();
+
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String url = cursor.getString(columnIndex);
+        cursor.close();
+        return  url;
+    }
+
     // 앨범에서 액티비티로 돌아온 후 실행되는 메서드
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(data == null){   // 어떤 이미지도 선택하지 않은 경우
-            Toast.makeText(getApplicationContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
-        }
-        else{   // 이미지를 하나라도 선택한 경우
-            if(data.getClipData() == null){     // 이미지를 하나만 선택한 경우
-                Log.e("single choice: ", String.valueOf(data.getData()));
-                Uri imageUri = data.getData();
-                uriList.add(imageUri);
 
-                adapter = new MultiImageAdapter(uriList, getApplicationContext());
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
-            }
-            else{      // 이미지를 여러장 선택한 경우
-                ClipData clipData = data.getClipData();
-                Log.e("clipData", String.valueOf(clipData.getItemCount()));
 
-                if(clipData.getItemCount() > 10){   // 선택한 이미지가 11장 이상인 경우
-                    Toast.makeText(getApplicationContext(), "사진은 한 번에 10장까지 선택 가능합니다.", Toast.LENGTH_LONG).show();
-                }
-                else{   // 선택한 이미지가 1장 이상 10장 이하인 경우
-                    Log.e(TAG, "multiple choice");
+        if (requestCode == 2222){
+            if (resultCode == RESULT_OK){
+                imageUrl = getRealPathFromUri(data.getData());
+                selectedUri = data.getData();
 
-                    for (int i = 0; i < clipData.getItemCount(); i++){
-                        Uri imageUri = clipData.getItemAt(i).getUri();  // 선택한 이미지들의 uri를 가져온다.
-                        try {
-                            uriList.add(imageUri);  //uri를 list에 담는다.
+                storageRef = mstorage.getReference();
+                StorageReference imageRef = storageRef.child("BoardImage/"+documentRef.getId()+".jpg");
+                UploadTask uploadTask = imageRef.putFile(selectedUri);
 
-                        } catch (Exception e) {
-                            Log.e(TAG, "File select error", e);
-                        }
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "사진이 정상적으로 업로드 되지 않았습니다.", Toast.LENGTH_LONG).show();
                     }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(getApplicationContext(), "사진이 정상적으로 업로드 되었습니다.", Toast.LENGTH_LONG).show();
+                    }
+                });
 
-                    adapter = new MultiImageAdapter(uriList, getApplicationContext());
-                    recyclerView.setAdapter(adapter);   // 리사이클러뷰에 어댑터 세팅
-                    recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
-                    // 리사이클러뷰 수평 스크롤 적용
-                }
+                Glide.with(getApplicationContext())
+                        .load(selectedUri)
+                        .fitCenter()
+                        .fallback(R.drawable.ic_launcher_foreground) // load 실패 시 보여줄 사진
+                        .into(Image);
+
+                Log.e("원조 uri", String.valueOf(selectedUri));
+
             }
+
+
         }
     }
 
-    // 현재 날짜, 시간 구하기
+
+    // 현재 날짜, 시간 구하기 (Real Date)
     private String getTime(){
         mNow = System.currentTimeMillis();
         mDate = new Date(mNow);
@@ -205,8 +248,9 @@ public class PostActivity extends AppCompatActivity {
                 return true;
             }
             case R.id.post_complete:{
-                if (postTitle.isEmpty() || postContent.isEmpty()){
+                if (postTitle.isEmpty() || postContent.isEmpty() || selectedUri == null){
                     Toast.makeText(getApplicationContext(), "입력이 안료되지 않았습니다.", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "입력 완료 안 됨");
                 }
                 else {
                     saveData();
@@ -225,26 +269,10 @@ public class PostActivity extends AppCompatActivity {
     public void saveData(){
         preferences = getSharedPreferences("UserName", MODE_PRIVATE);
 
-        //BoardModel boardModel = new BoardModel();
+        // 로그인한 정보 가져오기
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        String email = user.getEmail();
-        //Log.e(TAG, email);
         String uid = user.getUid();
-        postTitle = Title.getText().toString();
-        postContent = Content.getText().toString();
-        String category = "main";
-        long date = System.currentTimeMillis();
-        String realDate = getTime();
-
-
-
-
-        // SharedPreference 이용해서 저장된 값 불러오기
-        String mName = preferences.getString("userName", "없음");
-        Log.e(TAG, mName);
-
 
         // 파이어베이스에서 같은 uid의 이름 데이터 가져오기
         mDBReference = FirebaseDatabase.getInstance().getReference();
@@ -267,6 +295,29 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+        if (user.getEmail().isEmpty()){
+            Toast.makeText(getApplicationContext(), "로그인 먼저 해주세요!", Toast.LENGTH_LONG).show();
+
+        }
+        else{
+            email = user.getEmail();
+        }
+
+        //Log.e(TAG, email);
+
+        postTitle = Title.getText().toString();
+        postContent = Content.getText().toString();
+        String category = "main";
+        long date = System.currentTimeMillis();
+        String realDate = getTime();
+
+        Log.e("save에서의 uri", String.valueOf(originalBm));
+
+
+        // SharedPreference 이용해서 저장된 값 불러오기
+        String mName = preferences.getString("userName", "없음");
+        Log.e(TAG, mName);
+
 
 
 
@@ -285,6 +336,8 @@ public class PostActivity extends AppCompatActivity {
         board.put("Name", mName);
         board.put("Email", email);
         board.put("RealDate", realDate);
+        board.put("ImageUri", documentRef.getId());
+        board.put("BoardId", documentRef.getId());
 
 
         // B
@@ -294,13 +347,13 @@ public class PostActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "저장 성공");
+                        Log.d(TAG, "게시글 저장 성공");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "저장 실패");
+                        Log.e(TAG, "게시글 저장 실패");
                     }
                 });
 

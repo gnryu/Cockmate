@@ -32,6 +32,7 @@ public class MainMenuCommunityFragment extends Fragment {
             }
         });
 
+
         return v;
     }
 

@@ -1,5 +1,8 @@
 package com.example.cockmate.model;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +34,8 @@ public class BoardModel {
         result.put("Name", boardName);
         result.put("Email", boardEmail);
         result.put("RealDate", boardRealDate);
+        result.put("ImageUri", boardImageUrl);
+        result.put("BoardId", boardId);
 
         return result;
     }
@@ -59,6 +64,10 @@ public class BoardModel {
 
     public String getRealDate() {return boardRealDate;}
 
+    public String  getBoardImageUrl() {return  boardImageUrl;}
+
+    public String getBoardId() {return  boardId;}
+
     public void setCategory(String category) {
         this.boardCategory = category;
     }
@@ -82,4 +91,8 @@ public class BoardModel {
     public void setEmail (String email) {this.boardEmail = email;}
 
     public void setRealDate (String realDate) {this.boardRealDate = realDate;}
+
+    public void setBoardImageUrl (String  imageUrl) {this.boardImageUrl = imageUrl;}
+
+    public void setBoardId (String id) {this.boardId = id;}
 }

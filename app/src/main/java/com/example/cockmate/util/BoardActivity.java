@@ -4,7 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.cockmate.R;
 import com.example.cockmate.adapter.MyRecyclerAdapter;
 import com.example.cockmate.model.BoardModel;
@@ -43,6 +48,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +70,10 @@ public class BoardActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    private FirebaseStorage mstorage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = mstorage.getReference();
+    private StorageReference pathRef = storageRef.child("BoardImage");
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
@@ -79,6 +90,7 @@ public class BoardActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //뒤로가기
 
+        // 리사이클러뷰
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView); // 리사이클러뷰 초기화
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -93,16 +105,26 @@ public class BoardActivity extends AppCompatActivity {
     }
 
 
+
     // Firestore에서 데이터 불러오기
     private void EventChangeListener() {
 
-        // 날짜 최신순으로 정렬
+        // 날짜 최신순으로 정렬 (최신이 위로 오게끔)
         db.collection("Main_Board").orderBy("Date", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for(DocumentSnapshot ds : queryDocumentSnapshots){
+
+                            String  imaUri = (String) ds.get("ImageUri");
+                            //Bitmap imaUri = (Bitmap) ds.get("ImageUri");
+                            if (imaUri == null){
+                                Log.e(TAG, "uri 비어있음");
+                            }
+                            else {
+                                Log.e(TAG, String.valueOf(imaUri));
+                            }
 
                             // BoardModel에 각각 저장
                             BoardModel bmodel = ds.toObject(BoardModel.class);
@@ -112,6 +134,9 @@ public class BoardActivity extends AppCompatActivity {
                             bmodel.boardContent = (String) ds.get("Content");
                             bmodel.boardName = (String) ds.get("Name");
                             bmodel.boardTitle = (String) ds.get("Title");
+                            bmodel.boardImageUrl = imaUri;
+                            bmodel.boardId = (String) ds.get("BoardId");
+
 
                             mBoardModel.add(bmodel);
                             //mRecyclerAdapter.updateReceiptsList(mBoardModel);
@@ -120,11 +145,6 @@ public class BoardActivity extends AppCompatActivity {
                             //mRecyclerAdapter.notifyDataSetChanged();
                             if(progressDialog.isShowing())
                                 progressDialog.dismiss();
-
-
-
-                            //mBoardModel.add((BoardModel) boardData);
-                            //Log.e(TAG, b_email + b_category + b_realdate + b_content + b_name + b_title);
                         }
                         //mRecyclerAdapter.updateReceiptsList(mBoardModel);
                         mRecyclerAdapter = new MyRecyclerAdapter(BoardActivity.this, mBoardModel);
@@ -143,13 +163,6 @@ public class BoardActivity extends AppCompatActivity {
 
     }
 
-
-    public void OnStart(){
-        super.onStart();
-        setContentView(R.layout.activity_board);
-
-
-    }
 
 
 

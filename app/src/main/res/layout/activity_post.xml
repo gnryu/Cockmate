@@ -18,71 +18,85 @@
         android:elevation="4dp">
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="제목"
-            android:textSize="17dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_margin="10dp"/>
-
-        <EditText
-            android:id="@+id/post_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
 
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="제목"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_margin="10dp"/>
 
-    <EditText
-        android:id="@+id/post_content"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:hint="내용을 입력해주세요"
-        android:gravity="left"
-        android:background="@drawable/edittext_background"
-        android:layout_margin="10dp"
-        android:padding="7dp"/>
+                <EditText
+                    android:id="@+id/post_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    />
 
-    <Button
-        android:id="@+id/getImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="사진 첨부하기"
-        android:textSize="17dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:background="@drawable/edittext_background"
-        android:layout_margin="10dp"
-        android:padding="10dp"/>
+            </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="사진은 한 번에 최대 10개까지 선택 가능합니다."
-        android:textColor="#3C3C3C"
-        android:textSize="12dp"
-        android:layout_marginLeft="10dp"/>
+            <EditText
+                android:id="@+id/post_content"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:hint="내용을 입력해주세요"
+                android:gravity="left"
+                android:background="@drawable/edittext_background"
+                android:layout_margin="10dp"
+                android:padding="7dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="vertical"
-        android:layout_gravity="left"/>
+            <Button
+                android:id="@+id/getImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진 첨부하기"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/edittext_background"
+                android:layout_margin="10dp"
+                android:padding="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="대표 사진 하나를 선택해주세요."
+                android:textColor="#3C3C3C"
+                android:textSize="12dp"
+                android:layout_marginLeft="10dp"/>
+
+            <ImageView
+                android:id="@+id/post_image"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_corner"
+                android:scaleType="fitCenter"/>
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
 
 
 </LinearLayout>
