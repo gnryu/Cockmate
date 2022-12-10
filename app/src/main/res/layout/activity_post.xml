@@ -62,25 +62,174 @@
                 android:layout_margin="10dp"
                 android:padding="7dp"/>
 
-            <Button
-                android:id="@+id/getImage"
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="사진 첨부하기"
-                android:textSize="17dp"
+                android:text="카테고리를 선택해주세요"
                 android:textStyle="bold"
+                android:textSize="17dp"
                 android:textColor="@color/black"
-                android:background="@drawable/edittext_background"
-                android:layout_margin="10dp"
-                android:padding="10dp"/>
+                android:layout_marginTop="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="대표 사진 하나를 선택해주세요."
+                android:text="하나만 선택해주세요"
                 android:textColor="#3C3C3C"
                 android:textSize="12dp"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:stretchColumns="0,1,2,3"
+
+                >
+
+                <TableRow>
+
+                    <Button
+                        android:id="@+id/vodka"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="Vodka" />
+                    <Button
+                        android:id="@+id/gin"
+                        android:text="Gin"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        />
+                    <Button
+                        android:id="@+id/whisky"
+                        android:text="Whisky"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+
+                        />
+                    <Button
+                        android:id="@+id/brandy"
+                        android:text="Brandy"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <Button
+                        android:id="@+id/tequila"
+                        android:text="Tequila"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/click_before"
+                        />
+                    <Button
+                        android:id="@+id/rum"
+                        android:text="Rum"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+                        />
+                    <Button
+                        android:id="@+id/vermouth"
+                        android:text="Vermouth"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+                        />
+                    <Button
+                        android:id="@+id/wine"
+                        android:text="Wine"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+                        />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <Button
+                        android:id="@+id/liqueur"
+                        android:text="Liqueur"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/click_before"
+                        />
+
+                    <Button
+                        android:id="@+id/beer"
+                        android:text="Beer"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+                        />
+                    <Button
+                        android:id="@+id/non"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="Non-Alcohol"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+                        />
+                    <Button
+                        android:id="@+id/etc"
+                        android:text="Etc"
+                        android:layout_gravity="center"
+                        android:background="@drawable/click_before"
+                        />
+
+                </TableRow>
+            </TableLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="대표 사진 하나를 선택해주세요."
+                    android:textStyle="bold"
+                    android:textSize="17dp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="37dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
+                <Button
+                    android:id="@+id/getImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="사진 첨부하기"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:background="@drawable/click_after"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="10dp"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <ImageView
                 android:id="@+id/post_image"

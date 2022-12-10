@@ -1,6 +1,7 @@
 package com.example.cockmate.util;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -91,6 +92,7 @@ public class PostActivity extends AppCompatActivity {
 
     EditText Title, Content;
     String postTitle, postContent, mName;
+    String postCategory;
     ImageView Image;
     Uri selectedUri;
     private String imageUrl="";
@@ -108,8 +110,19 @@ public class PostActivity extends AppCompatActivity {
     private File tempFile;
     Bitmap originalBm;
 
-    public PostActivity() {
-    }
+    // 베이스 카테고리 버튼
+    Button vodka;
+    Button gin;
+    Button whisky;
+    Button brandy;
+    Button tequila;
+    Button rum;
+    Button wine;
+    Button liqueur;
+    Button vermouth;
+    Button beer;
+    Button free;
+    Button etc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,10 +138,26 @@ public class PostActivity extends AppCompatActivity {
         Content = findViewById(R.id.post_content);
         Image = findViewById(R.id.post_image);
 
+        vodka = findViewById(R.id.vodka);
+        gin = findViewById(R.id.gin);
+        whisky = findViewById(R.id.whisky);
+        brandy = findViewById(R.id.brandy);
+        tequila = findViewById(R.id.tequila);
+        rum = findViewById(R.id.rum);
+        wine = findViewById(R.id.wine);
+        liqueur = findViewById(R.id.liqueur);
+        vermouth = findViewById(R.id.vermouth);
+        beer = findViewById(R.id.beer);
+        free = findViewById(R.id.non);
+        etc = findViewById(R.id.etc);
+
 
         // 게시글의 고유 Id 생성
         documentRef = db.collection("Main_Board").document();
 
+
+        // 베이스 카테고리 하나만 선택하기
+        SelectCategory();
 
 
         // 앨범으로 이동하는 버튼
@@ -163,19 +192,6 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
-    //절대경로를 구한다.
-    private String getRealPathFromUri(Uri uri)
-    {
-        String[] proj=  {MediaStore.Images.Media.DATA};
-        CursorLoader cursorLoader = new CursorLoader(this,uri,proj,null,null,null);
-        Cursor cursor = cursorLoader.loadInBackground();
-
-        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String url = cursor.getString(columnIndex);
-        cursor.close();
-        return  url;
-    }
 
     // 앨범에서 액티비티로 돌아온 후 실행되는 메서드
     @Override
@@ -186,7 +202,6 @@ public class PostActivity extends AppCompatActivity {
 
         if (requestCode == 2222){
             if (resultCode == RESULT_OK){
-                imageUrl = getRealPathFromUri(data.getData());
                 selectedUri = data.getData();
 
                 storageRef = mstorage.getReference();
@@ -208,7 +223,6 @@ public class PostActivity extends AppCompatActivity {
                 Glide.with(getApplicationContext())
                         .load(selectedUri)
                         .fitCenter()
-                        .fallback(R.drawable.ic_launcher_foreground) // load 실패 시 보여줄 사진
                         .into(Image);
 
                 Log.e("원조 uri", String.valueOf(selectedUri));
@@ -248,7 +262,7 @@ public class PostActivity extends AppCompatActivity {
                 return true;
             }
             case R.id.post_complete:{
-                if (postTitle.isEmpty() || postContent.isEmpty() || selectedUri == null){
+                if (postTitle.isEmpty() || postContent.isEmpty() || selectedUri == null || postCategory==null){
                     Toast.makeText(getApplicationContext(), "입력이 안료되지 않았습니다.", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "입력 완료 안 됨");
                 }
@@ -330,7 +344,7 @@ public class PostActivity extends AppCompatActivity {
 
         Map<String, Object> board = new HashMap<>();
         board.put("Title", postTitle);
-        board.put("Category", "main");
+        board.put("Category", postCategory);
         board.put("Content", postContent);
         board.put("Date", date);
         board.put("Name", mName);
@@ -339,8 +353,11 @@ public class PostActivity extends AppCompatActivity {
         board.put("ImageUri", documentRef.getId());
         board.put("BoardId", documentRef.getId());
 
+        Log.e(TAG, postCategory);
+
 
         // B
+
 
         db.collection("Main_Board")
                 .add(board)
@@ -356,6 +373,8 @@ public class PostActivity extends AppCompatActivity {
                         Log.e(TAG, "게시글 저장 실패");
                     }
                 });
+
+
 
 
 
@@ -390,6 +409,276 @@ public class PostActivity extends AppCompatActivity {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED ) {
             Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
         }
+    }
+
+    // 카테고리 선택
+    public void SelectCategory(){
+        vodka.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vodka.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = vodka.getText().toString();
+
+                //vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+
+        gin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gin.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = gin.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                //gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+
+        whisky.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                whisky.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = whisky.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                //whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+
+        brandy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                brandy.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = brandy.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                //brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+        tequila.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tequila.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = tequila.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                //tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+        rum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rum.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = rum.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                //rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+        wine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                wine.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = wine.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                //wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+        liqueur.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                liqueur.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = liqueur.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                //liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+        vermouth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vermouth.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = vermouth.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                //vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+        beer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                beer.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = beer.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                //beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+        free.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                free.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = free.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                // free.setBackgroundResource(R.drawable.click_before);
+                etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
+        etc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                etc.setBackgroundResource(R.drawable.click_after);
+                view.setPressed(true);
+                postCategory = etc.getText().toString();
+
+                // 버튼색 비활성화
+                vodka.setBackgroundResource(R.drawable.click_before);
+                gin.setBackgroundResource(R.drawable.click_before);
+                whisky.setBackgroundResource(R.drawable.click_before);
+                brandy.setBackgroundResource(R.drawable.click_before);
+                tequila.setBackgroundResource(R.drawable.click_before);
+                rum.setBackgroundResource(R.drawable.click_before);
+                wine.setBackgroundResource(R.drawable.click_before);
+                liqueur.setBackgroundResource(R.drawable.click_before);
+                vermouth.setBackgroundResource(R.drawable.click_before);
+                beer.setBackgroundResource(R.drawable.click_before);
+                free.setBackgroundResource(R.drawable.click_before);
+                //etc.setBackgroundResource(R.drawable.click_before);
+            }
+        });
     }
 
 
