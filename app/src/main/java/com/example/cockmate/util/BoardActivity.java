@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -74,6 +76,10 @@ public class BoardActivity extends AppCompatActivity {
     private StorageReference storageRef = mstorage.getReference();
     private StorageReference pathRef = storageRef.child("BoardImage");
 
+    Button baseCategoryButtonUp;
+    Button baseCategoryButtonDown;
+    View baseCategoryList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
@@ -99,8 +105,30 @@ public class BoardActivity extends AppCompatActivity {
         mBoardModel = new ArrayList<BoardModel>();
         EventChangeListener();
 
+        baseCategoryButtonUp = findViewById(R.id.base_categroy_button_up);
+        baseCategoryButtonDown = findViewById(R.id.base_categroy_button_down);
+        baseCategoryList = findViewById(R.id.base_category_list);
+
+        baseCategoryButtonDown.setVisibility(View.GONE);
 
 
+        baseCategoryButtonUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                baseCategoryList.setVisibility(View.GONE);
+                baseCategoryButtonUp.setVisibility(View.GONE);
+                baseCategoryButtonDown.setVisibility(View.VISIBLE);
+            }
+        });
+
+        baseCategoryButtonDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                baseCategoryList.setVisibility(View.VISIBLE);
+                baseCategoryButtonUp.setVisibility(View.VISIBLE);
+                baseCategoryButtonDown.setVisibility(View.GONE);
+            }
+        });
 
     }
 
