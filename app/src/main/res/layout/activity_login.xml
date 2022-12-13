@@ -12,63 +12,102 @@
         android:id="@+id/login_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/color1"
+        android:background="@color/white"
+        app:title=" "
         android:theme="?attr/actionBarTheme"
-        app:title="Login Activity"
-        app:titleCentered="true"
-        app:titleTextColor="@color/black"
         android:elevation="4dp">
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <EditText
-            android:id="@+id/m_user_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="10dp"
-            android:gravity="left"
-            android:textSize="15dp"
-            android:hint="Email" />
-
-        <EditText
-            android:id="@+id/m_user_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="10dp"
-            android:gravity="left"
-            android:textSize="15dp"
-            android:hint="password"
-            android:inputType="textPassword"/>
-
-        <Button
-            android:id="@+id/login_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="LOGIN" />
+        android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/login_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log in your account"
+            android:textStyle="bold"
+            android:textSize="27sp"
+            android:layout_marginTop="50dp"
+            android:textColor="@color/color7"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="아직 계정이 없으신가요?" />
+            app:layout_constraintTop_toBottomOf="@+id/login_title"
+            app:layout_constraintBottom_toTopOf="@+id/login_bottom"
+            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/join_text"
-            android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/m_user_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:gravity="left"
+                android:textSize="15dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/login_edittext"
+                />
+
+            <EditText
+                android:id="@+id/m_user_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:gravity="left"
+                android:textSize="15dp"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:background="@drawable/login_edittext"
+                />
+
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Log In"
+                android:textColor="@color/white"
+                android:background="@drawable/login_button"
+
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/login_bottom"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textColor="#ED0000"
-            android:text="가입하기" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/login_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+
+                />
+
+
+        </LinearLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 </LinearLayout>

@@ -11,10 +11,13 @@
         android:icon="@drawable/comment"
         android:title="COMMUNITY" />
 
+    <!--
+
     <item
         android:id="@+id/menu_bookmark"
         android:icon="@drawable/star"
         android:title="BOOKMARK" />
+        -->
 
     <item
         android:id="@+id/menu_mInfo"

@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/post_complete"
-        android:title="등록"
+        android:title="Add"
         app:showAsAction="ifRoom"/>
 
 </menu>

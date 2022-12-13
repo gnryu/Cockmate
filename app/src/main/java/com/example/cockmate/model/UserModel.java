@@ -1,5 +1,11 @@
 package com.example.cockmate.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +23,19 @@ public class UserModel {
         this.userName = name;
         this.userEmail = email;
         this.userId = id;
+    }
+
+    public void Save(Context context){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("NAME", userName);
+        editor.apply();
+
+    }
+
+    public void Load(Context context){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        userName = sp.getString("NAME", "사용자 이름 없음");
     }
 
     public Map<String, Object> toMap(){

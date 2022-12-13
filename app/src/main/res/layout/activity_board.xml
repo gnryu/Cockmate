@@ -23,7 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,6 +34,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:textStyle="bold"
+
             />
 
         <FrameLayout
@@ -94,6 +96,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_vodka"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -132,6 +135,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_gin"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -169,6 +173,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_whisky"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -206,6 +211,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_brandy"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -243,6 +249,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_tequila"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -280,6 +287,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_rum"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -317,6 +325,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_wine"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -354,6 +363,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_liqueur"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -391,6 +401,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_vermouth"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -428,6 +439,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_beer"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -465,6 +477,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_free"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -502,6 +515,7 @@
                         android:background="@drawable/board_list_button"/>
 
                     <ImageButton
+                        android:id="@+id/go_etc"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
@@ -539,7 +553,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:layout_gravity="center"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

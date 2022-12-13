@@ -1,5 +1,6 @@
 package com.example.cockmate.util;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,10 +20,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +35,7 @@ import com.example.cockmate.adapter.CommentAdapter;
 import com.example.cockmate.adapter.MyRecyclerAdapter;
 import com.example.cockmate.model.BoardModel;
 import com.example.cockmate.model.CommentModel;
+import com.example.cockmate.model.UserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,12 +74,15 @@ public class DetailActivity extends AppCompatActivity {
     EditText mComment;
     Button mCommentButton;
 
+    TextView comment_num;
+
     long mNow;
     Date mDate;
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mDBReference;
+    private FirebaseUser user;
     private SharedPreferences preferences;
 
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -90,12 +98,29 @@ public class DetailActivity extends AppCompatActivity {
 
     String mboardId;
 
+    Intent intent;
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    private UserModel MyUserModel = new UserModel();
+    private Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        context = getApplicationContext();
+
+        // 로그인한 정보 가져오기
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        if (user != null){
+            firebaseAuth.updateCurrentUser(user);
+            loadName();
+        }
 
         // 툴바생성
         Toolbar toolbar = findViewById(R.id.detail_bar);
@@ -114,22 +139,29 @@ public class DetailActivity extends AppCompatActivity {
 
         mTitle = (TextView) findViewById(R.id.detailTitle);
         mContent = (TextView) findViewById(R.id.detailContent);
-        //mCategory = findViewById(R.id.);
+        mCategory = findViewById(R.id.detailCategoryReal);
         mRealDate = (TextView) findViewById(R.id.detailDate);
         mName = (TextView) findViewById(R.id.detailName);
         mImage = (ImageView) findViewById(R.id.detailImage);
+        comment_num = (TextView) findViewById(R.id.comment_num);
 
         mImage.setClipToOutline(true);
 
-        Intent intent = getIntent();
+
+
+
+        intent = getIntent();
         ArrayList<String> boardInfo = (ArrayList<String>) intent.getSerializableExtra("BoardInfo");
+        //boardInfo = new ArrayList<>();
         mTitle.setText(boardInfo.get(0));
         mContent.setText(boardInfo.get(1));
+        mCategory.setText(boardInfo.get(2));
         mRealDate.setText(boardInfo.get(3));
         mName.setText(boardInfo.get(4));
         String mimageuri = boardInfo.get(5);
         //Log.e(TAG, boardInfo.get(5));
         mboardId = boardInfo.get(6);
+
 
         if (pathRef == null) {
             Log.e(TAG, "저장소에 사진이 없습니다.");
@@ -170,6 +202,7 @@ public class DetailActivity extends AppCompatActivity {
         // 댓글 불러오기
         makeCommentRecyclerview();
 
+
         // 댓글 저장하기
         saveCommentData();
 
@@ -178,6 +211,7 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+
     // 댓글 파이어베이스에서 불러오기
     public void makeCommentRecyclerview(){
 
@@ -185,7 +219,7 @@ public class DetailActivity extends AppCompatActivity {
         // 날짜 최신순으로 정렬 (최신이 아래로 오게끔)
         db.collection("Comment")
                 .whereEqualTo("CommentBoardId", mboardId)
-                //.orderBy("CommentDate", Query.Direction.ASCENDING)
+                .orderBy("CommentDate", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -208,8 +242,47 @@ public class DetailActivity extends AppCompatActivity {
                         // Comment 리사이클러뷰에 데이터 전달하기
                         mRecyclerView.setAdapter(mCommentAdapter);
                         mCommentAdapter.setItemList(mCommentModel);
+
+                        // 댓글 수 저장
+                        int commentNum = mCommentAdapter.getItemCount();
+                        //Log.e(TAG, "받아온 댓글 수"+String.valueOf(commentNum));
+                        comment_num.setText(String.valueOf(commentNum));
                     }
                 });
+    }
+
+    public void loadName(){
+        //pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String uid = user.getUid();
+
+        // 파이어베이스에서 같은 uid의 이름 데이터 가져오기
+        mDBReference = FirebaseDatabase.getInstance().getReference();
+        mDBReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String name = dataSnapshot.child("Name").getValue(String.class);
+                if (name != null){
+                    Log.e(TAG, "detail안에서 이름 불러왔을때 : "+name);
+
+                    // UserModel에 저장하기
+                    UserModel userModel = new UserModel(name, user.getEmail(), uid);
+                    userModel.Save(context);
+
+                    // 바로 SharedPreferences에 저장하기
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("NAME_detail", name);
+                    editor.apply();
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //Log.e("MainActivity", String.valueOf(databaseError.toException())); // 에러문 출력
+            }
+        });
+
     }
 
 
@@ -238,70 +311,64 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        preferences = getSharedPreferences("UserName", MODE_PRIVATE);
-
-                        // 로그인한 정보 가져오기
-                        firebaseAuth = FirebaseAuth.getInstance();
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                        String uid = user.getUid();
-
-                        // 파이어베이스에서 같은 uid의 이름 데이터 가져오기
-                        mDBReference = FirebaseDatabase.getInstance().getReference();
-                        mDBReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String name = dataSnapshot.child("Name").getValue(String.class);
-                                if (name != null){
-                                    //Log.d(TAG, name);
-
-                                    // SharedPreference 사용해서 name 임시 저장하기
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putString("userName", name);
-                                    editor.commit();
-                                }
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                //Log.e("MainActivity", String.valueOf(databaseError.toException())); // 에러문 출력
-                            }
-                        });
-
-                        // BoardModel에서 BoardId 가져오기
-                        Intent intent = getIntent();
-                        ArrayList<String> boardInfo = (ArrayList<String>) intent.getSerializableExtra("BoardInfo");
-
-                        // CommentModel에 저장할 데이터 불러오기
-                        String myCommentName = preferences.getString("userName", "없음"); // SharedPreference 이용해서 저장된 값 불러오기
-                        //Log.e(TAG, myCommentName);
-                        String myCommentBoardId = boardInfo.get(6);
-                        String myCommentContent = mComment.getText().toString();
-                        long myCommentDate = System.currentTimeMillis();
-                        String myCommentRealDate = getTime();
-
-                        // 파이어베이스에 저장할 HashMap 데이터 만들기
-                        Map<String, Object> comment = new HashMap<>();
-                        comment.put("CommentBoardId", myCommentBoardId);
-                        comment.put("CommentUserName", myCommentName);
-                        comment.put("CommentContent", myCommentContent);
-                        comment.put("CommentDate", myCommentDate);
-                        comment.put("CommentRealDate", myCommentRealDate);
-
-                        db.collection("Comment")
-                                .add(comment)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Log.d(TAG, "댓글 저장 성공");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.e(TAG, "댓글 저장 실패");
-                                    }
-                                });
+                        //preferences = getSharedPreferences("UserName", MODE_PRIVATE);
 
 
+                        if (user == null){
+                            Toast.makeText(getApplicationContext(), "Log In Please", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "로그인 먼저 해주세요");
+                        }
+                        else{
+
+
+                            // BoardModel에서 BoardId 가져오기
+                            intent = getIntent();
+                            ArrayList<String> boardInfo = (ArrayList<String>) intent.getSerializableExtra("BoardInfo");
+
+
+                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                            String myCommentName = sp.getString("NAME_detail", "사용자 이름 없음");
+                            Log.e(TAG, "pref에 저장한 detail 이름 : "+myCommentName);
+
+
+                            // CommentModel에 저장할 데이터 불러오기
+                            //Log.e(TAG, myCommentName);
+                            String myCommentBoardId = boardInfo.get(6);
+                            String myCommentContent = mComment.getText().toString();
+                            long myCommentDate = System.currentTimeMillis();
+                            String myCommentRealDate = getTime();
+
+                            // 파이어베이스에 저장할 HashMap 데이터 만들기
+                            Map<String, Object> comment = new HashMap<>();
+                            comment.put("CommentBoardId", myCommentBoardId);
+                            comment.put("CommentUserName", myCommentName);
+                            comment.put("CommentContent", myCommentContent);
+                            comment.put("CommentDate", myCommentDate);
+                            comment.put("CommentRealDate", myCommentRealDate);
+
+                            db.collection("Comment")
+                                    .add(comment)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Log.d(TAG, "댓글 저장 성공");
+
+                                            // 화면 새로고침하기
+                                            overridePendingTransition(0, 0);//인텐트 효과 없애기
+                                            Intent intent = getIntent(); //인텐트
+                                            finish();
+                                            startActivity(intent); //액티비티 열기
+                                            overridePendingTransition(0, 0);//인텐트 효과 없애기
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e(TAG, "댓글 저장 실패");
+                                        }
+                                    });
+
+                        }
 
                     }
                 });

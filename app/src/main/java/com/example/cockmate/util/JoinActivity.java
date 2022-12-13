@@ -41,6 +41,7 @@ public class JoinActivity extends AppCompatActivity {
     EditText mName, mEmailText, mPasswordText, mPasswordCheckText;
     Button mJoinBtn;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -48,6 +49,8 @@ public class JoinActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
+
+        //firebaseAuth.updateCurrentUser(user);
 
         // 툴바생성
         Toolbar toolbar = findViewById(R.id.join_bar);
@@ -73,7 +76,7 @@ public class JoinActivity extends AppCompatActivity {
                 if(pwd.equals(pwd_check)) {
                     Log.d(TAG, "회원가입 버튼 " + email + ", " + pwd);
                     final ProgressDialog dialog = new ProgressDialog(JoinActivity.this);
-                    dialog.setMessage("가입중입니다...");
+                    dialog.setMessage("signing up...");
                     dialog.show();
 
                     // 파이어베이스에 신규 계정 등록하기
@@ -82,7 +85,7 @@ public class JoinActivity extends AppCompatActivity {
                             // 가입 성공 시
                             if(task.isSuccessful()) {
                                 dialog.dismiss();
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
+                                user = firebaseAuth.getCurrentUser();
 
                                 String email = user.getEmail();
                                 String uid = user.getUid();
@@ -101,13 +104,13 @@ public class JoinActivity extends AppCompatActivity {
                                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                             @Override
                                             public void onSuccess(DocumentReference documentReference) {
-                                                Log.d(TAG, "저장 성공");
+                                                Log.d(TAG, "사용자 정보 저장 성공");
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Log.e(TAG, "저장 실패");
+                                                Log.e(TAG, "사용자 정보 저장 실패");
                                             }
                                         });
 
@@ -129,16 +132,16 @@ public class JoinActivity extends AppCompatActivity {
                                 Intent intent = new Intent(JoinActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 finish();
-                                Toast.makeText(JoinActivity.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(JoinActivity.this, "Successfully Registered!", Toast.LENGTH_SHORT).show();
                             } else {
                                 dialog.dismiss();
-                                Toast.makeText(JoinActivity.this, "이미 존재하는 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(JoinActivity.this, "The ID already exists.", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                         }
                     });
                 } else { // 비밀번호 오류 시
-                    Toast.makeText(JoinActivity.this, "비밀번호가 틀렸습니다. 다시 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(JoinActivity.this, "Password is incorrect.", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }

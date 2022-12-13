@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/whisky_bar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/color12"
+        android:theme="?attr/actionBarTheme"
+        app:title="Whisky"
+        app:titleCentered="true"
+        app:titleTextColor="@color/black"
+        android:elevation="4dp">
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <TextView
+        android:id="@+id/noticewhisky"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="There are no posts yet.."
+        android:textColor="#3C3C3C"
+        android:textSize="15dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/whisky_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp" />
+
+</LinearLayout>
