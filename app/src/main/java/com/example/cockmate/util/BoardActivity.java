@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -69,6 +70,7 @@ public class BoardActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private DatabaseReference mDBReference;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
     ProgressDialog progressDialog;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -76,9 +78,24 @@ public class BoardActivity extends AppCompatActivity {
     private StorageReference storageRef = mstorage.getReference();
     private StorageReference pathRef = storageRef.child("BoardImage");
 
+
+
     Button baseCategoryButtonUp;
     Button baseCategoryButtonDown;
     View baseCategoryList;
+
+    ImageButton mVodka;
+    ImageButton mGin;
+    ImageButton mWhisky;
+    ImageButton mBrandy;
+    ImageButton mTequila;
+    ImageButton mRum;
+    ImageButton mWine;
+    ImageButton mLiqueur;
+    ImageButton mVermouth;
+    ImageButton mBeer;
+    ImageButton mFree;
+    ImageButton mEtc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -102,7 +119,10 @@ public class BoardActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
+        // 베이스 카테고리 정리
         mBoardModel = new ArrayList<BoardModel>();
+
+        // 리사이클러뷰 불러오기
         EventChangeListener();
 
         baseCategoryButtonUp = findViewById(R.id.base_categroy_button_up);
@@ -110,6 +130,24 @@ public class BoardActivity extends AppCompatActivity {
         baseCategoryList = findViewById(R.id.base_category_list);
 
         baseCategoryButtonDown.setVisibility(View.GONE);
+
+        // 베이스 카테고리 버튼 정리
+        mVodka = findViewById(R.id.go_vodka);
+        mGin = findViewById(R.id.go_gin);
+        mWhisky = findViewById(R.id.go_whisky);
+        mBrandy = findViewById(R.id.go_brandy);
+        mTequila = findViewById(R.id.go_tequila);
+        mRum = findViewById(R.id.go_rum);
+        mWine = findViewById(R.id.go_wine);
+        mLiqueur = findViewById(R.id.go_liqueur);
+        mVermouth = findViewById(R.id.go_vermouth);
+        mBeer = findViewById(R.id.go_beer);
+        mFree = findViewById(R.id.go_free);
+        mEtc = findViewById(R.id.go_etc);
+
+        // 로그인한 정보 가져오기
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
 
 
         baseCategoryButtonUp.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +168,113 @@ public class BoardActivity extends AppCompatActivity {
             }
         });
 
+        mVodka.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, VodkaActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mGin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, GinActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mWhisky.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, WhiskyActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mBrandy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, BrandyActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mTequila.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, TequilaActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mRum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, RumActivity.class);
+                startActivity(intent);
+            }
+        });
+        mWine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, WineActivity.class);
+                startActivity(intent);
+            }
+        });
+        mLiqueur.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, LiqueurActivity.class);
+                startActivity(intent);
+            }
+        });
+        mVermouth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, VermouthActivity.class);
+                startActivity(intent);
+            }
+        });
+        mBeer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, BeerActivity.class);
+                startActivity(intent);
+            }
+        });
+        mFree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, FreeActivity.class);
+                startActivity(intent);
+            }
+        });
+        mEtc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, EtcActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        // 리사이클러뷰
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView); // 리사이클러뷰 초기화
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // 베이스 카테고리 정리
+        mBoardModel = new ArrayList<BoardModel>();
+
+
+        // 리사이클러뷰 불러오기
+        EventChangeListener();
     }
 
 
@@ -165,12 +310,8 @@ public class BoardActivity extends AppCompatActivity {
                             bmodel.boardImageUrl = imaUri;
                             bmodel.boardId = (String) ds.get("BoardId");
 
-
                             mBoardModel.add(bmodel);
-                            //mRecyclerAdapter.updateReceiptsList(mBoardModel);
 
-
-                            //mRecyclerAdapter.notifyDataSetChanged();
                             if(progressDialog.isShowing())
                                 progressDialog.dismiss();
                         }
@@ -182,9 +323,6 @@ public class BoardActivity extends AppCompatActivity {
                         mRecyclerView.setAdapter(mRecyclerAdapter);
                         //mRecyclerAdapter.notifyDataSetChanged();
                         mRecyclerAdapter.setItemList(mBoardModel);
-
-                        //mRecyclerView.invalidate();
-                        //mRecyclerView.getAdapter().notifyDataSetChanged();
 
                     }
                 });
@@ -216,10 +354,16 @@ public class BoardActivity extends AppCompatActivity {
                 return true;
             }
             case R.id.post:{
-                Intent intent = new Intent(BoardActivity.this, PostActivity.class);
-                startActivity(intent);
-                Toast.makeText(getApplicationContext(), "글쓰기 버튼 클릭됨", Toast.LENGTH_LONG).show();
-                return true;
+                if (user == null){
+                    Toast.makeText(getApplicationContext(), "Log In Please", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "로그인 먼저 해주세요");
+                }
+                else{
+                    Intent intent = new Intent(BoardActivity.this, PostActivity.class);
+                    startActivity(intent);
+                    //Toast.makeText(getApplicationContext(), "글쓰기 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                    return true;
+                }
             }
         }
         return super.onOptionsItemSelected(item);

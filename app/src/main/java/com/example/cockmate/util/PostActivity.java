@@ -2,6 +2,7 @@ package com.example.cockmate.util;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.service.autofill.UserData;
 import android.util.Log;
@@ -82,10 +84,13 @@ public class PostActivity extends AppCompatActivity {
 
     private static final String TAG = "PostActivity";
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
     private DatabaseReference mDBReference;
     private SharedPreferences preferences;
     private MyRecyclerAdapter mRecyclerAdapter;
     private RecyclerView mRecyclerView;
+
+    Map<String, Object> board;
 
 
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -124,10 +129,38 @@ public class PostActivity extends AppCompatActivity {
     Button free;
     Button etc;
 
+    Context context;
+
+    private String MyName;
+    String prefName;
+    private UserModel MyUserModel = new UserModel();
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+        //pref = PreferenceManager.getDefaultSharedPreferences(this);
+        //editor = pref.edit();
+
+        context = getApplicationContext();
+
+        // 로그인한 정보 가져오기
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        if (user != null){
+            firebaseAuth.updateCurrentUser(user);
+            loadName();
+        }
+
+        pref = PreferenceManager.getDefaultSharedPreferences(context);
+        //pref = context.getSharedPreferences("loadName", MODE_PRIVATE);
+        editor = pref.edit();
+
+        //context = MainActivity.
 
         // 툴바생성
         Toolbar toolbar = findViewById(R.id.post_bar);
@@ -154,6 +187,13 @@ public class PostActivity extends AppCompatActivity {
 
         // 게시글의 고유 Id 생성
         documentRef = db.collection("Main_Board").document();
+
+        if(selectedUri == null){
+            Image.setVisibility(View.GONE);
+        }
+        else {
+            Image.setVisibility(View.VISIBLE);
+        }
 
 
         // 베이스 카테고리 하나만 선택하기
@@ -193,6 +233,7 @@ public class PostActivity extends AppCompatActivity {
     }
 
 
+
     // 앨범에서 액티비티로 돌아온 후 실행되는 메서드
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -204,6 +245,13 @@ public class PostActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK){
                 selectedUri = data.getData();
 
+                if(selectedUri == null){
+                    Image.setVisibility(View.GONE);
+                }
+                else {
+                    Image.setVisibility(View.VISIBLE);
+                }
+
                 storageRef = mstorage.getReference();
                 StorageReference imageRef = storageRef.child("BoardImage/"+documentRef.getId()+".jpg");
                 UploadTask uploadTask = imageRef.putFile(selectedUri);
@@ -211,12 +259,12 @@ public class PostActivity extends AppCompatActivity {
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "사진이 정상적으로 업로드 되지 않았습니다.", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getApplicationContext(), "사진이 정상적으로 업로드 되지 않았습니다.", Toast.LENGTH_LONG).show();
                     }
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(getApplicationContext(), "사진이 정상적으로 업로드 되었습니다.", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "사진이 정상적으로 업로드 되었습니다.", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -263,12 +311,12 @@ public class PostActivity extends AppCompatActivity {
             }
             case R.id.post_complete:{
                 if (postTitle.isEmpty() || postContent.isEmpty() || selectedUri == null || postCategory==null){
-                    Toast.makeText(getApplicationContext(), "입력이 안료되지 않았습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Your input is not complete.", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "입력 완료 안 됨");
                 }
                 else {
                     saveData();
-                    Toast.makeText(getApplicationContext(), "등록 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "등록 버튼 클릭됨", Toast.LENGTH_LONG).show();
                     // 리사이클러뷰 저장 및 새로고침
                     //mRecyclerAdapter.notifyDataSetChanged();
                     //mRecyclerView.invalidate();
@@ -280,12 +328,9 @@ public class PostActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void saveData(){
-        preferences = getSharedPreferences("UserName", MODE_PRIVATE);
+    public void loadName(){
+        //pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // 로그인한 정보 가져오기
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
         String uid = user.getUid();
 
         // 파이어베이스에서 같은 uid의 이름 데이터 가져오기
@@ -295,12 +340,18 @@ public class PostActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String name = dataSnapshot.child("Name").getValue(String.class);
                 if (name != null){
-                    //Log.d(TAG, name);
+                    Log.e(TAG, "post안에서 이름 불러왔을때 : "+name);
 
-                    // SharedPreference 사용해서 name 임시 저장하기
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("userName", name);
-                    editor.commit();
+                    // UserModel에 저장하기
+                    UserModel userModel = new UserModel(name, user.getEmail(), uid);
+                    userModel.Save(context);
+
+                    // 바로 SharedPreferences에 저장하기
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("NAME_post", name);
+                    editor.apply();
+
                 }
             }
             @Override
@@ -309,15 +360,12 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        if (user.getEmail().isEmpty()){
-            Toast.makeText(getApplicationContext(), "로그인 먼저 해주세요!", Toast.LENGTH_LONG).show();
+    }
 
-        }
-        else{
-            email = user.getEmail();
-        }
+    public void saveData(){
 
-        //Log.e(TAG, email);
+        //pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+
 
         postTitle = Title.getText().toString();
         postContent = Content.getText().toString();
@@ -325,40 +373,32 @@ public class PostActivity extends AppCompatActivity {
         long date = System.currentTimeMillis();
         String realDate = getTime();
 
-        Log.e("save에서의 uri", String.valueOf(originalBm));
+        //loadName();
+        // 이름 불러오는 다양한 방법
+        UserModel userModel = new UserModel();
+        userModel.Load(context);
+        String USERNAME = userModel.userName;
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        String userName = sp.getString("NAME_post", "사용자 이름 없음");
+        Log.e(TAG, "UserModel에 저장한 이름 : "+USERNAME);
+        Log.e(TAG, "UserModel getter : "+userModel.getName());
+        Log.e(TAG, "pref에 저장한 이름 : "+userName);
 
 
-        // SharedPreference 이용해서 저장된 값 불러오기
-        String mName = preferences.getString("userName", "없음");
-        Log.e(TAG, mName);
+        board = new HashMap<>();
 
-
-
-
-
-
-        // 파이어베이스에 저장하기
-        //HashMap<String, Object> boardUpdates = new HashMap<>();
-        //BoardModel boardModel = new BoardModel(postTitle, category, postContent, date, mName, email);
-        //Map<String, Object> boardValue = boardModel.toMap();
-
-        Map<String, Object> board = new HashMap<>();
         board.put("Title", postTitle);
         board.put("Category", postCategory);
         board.put("Content", postContent);
         board.put("Date", date);
-        board.put("Name", mName);
+        board.put("Name", userName);
         board.put("Email", email);
         board.put("RealDate", realDate);
         board.put("ImageUri", documentRef.getId());
         board.put("BoardId", documentRef.getId());
 
-        Log.e(TAG, postCategory);
 
-
-        // B
-
-
+        // 파이어스토어에 저장하기
         db.collection("Main_Board")
                 .add(board)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -375,13 +415,6 @@ public class PostActivity extends AppCompatActivity {
                 });
 
 
-
-
-
-        //boardUpdates.put("/Main_Board/" + uid, boardValue);
-        //mDBReference.child("Main_Board").child(uid).setValue(boardValue);
-        //mDBReference.updateChildren(boardUpdates);
-        //mDBReference.
 
     }
 

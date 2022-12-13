@@ -9,10 +9,10 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/post_bar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/color1"
+        android:layout_height="45dp"
+        android:background="@color/white"
         android:theme="?attr/actionBarTheme"
-        app:title="글쓰기"
+        app:title="Write"
         app:titleCentered="true"
         app:titleTextColor="@color/black"
         android:elevation="4dp">
@@ -37,10 +37,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="제목"
+                    android:text="Title"
                     android:textSize="17dp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:textColor="@color/color8"
                     android:layout_margin="10dp"/>
 
                 <EditText
@@ -52,21 +52,32 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Content"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:textColor="@color/color8"
+                android:layout_margin="10dp"/>
+
             <EditText
                 android:id="@+id/post_content"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:hint="내용을 입력해주세요"
+                android:hint="EX)\n\nWrite the name of the drink and the quantity.\nWrite your recipe."
                 android:gravity="left"
                 android:background="@drawable/edittext_background"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:padding="7dp"/>
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="카테고리를 선택해주세요"
+                android:text="Select Category"
                 android:textStyle="bold"
                 android:textSize="17dp"
                 android:textColor="@color/black"
@@ -77,7 +88,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="하나만 선택해주세요"
+                android:text="only one"
                 android:textColor="#3C3C3C"
                 android:textSize="12dp"
                 android:layout_marginLeft="10dp"
@@ -198,13 +209,15 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:paddingBottom="15dp"
+                >
 
                 <TextView
                     android:id="@+id/select"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="대표 사진 하나를 선택해주세요."
+                    android:text="Select a Representative Image"
                     android:textStyle="bold"
                     android:textSize="17dp"
                     android:textColor="@color/black"
@@ -216,8 +229,9 @@
                     android:id="@+id/getImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="사진 첨부하기"
+                    android:text="Attach\nImage"
                     android:textSize="12dp"
+                    android:gravity="center"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:background="@drawable/click_after"
@@ -235,7 +249,7 @@
                 android:id="@+id/post_image"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="20dp"
                 android:layout_gravity="center"
                 android:background="@drawable/round_corner"

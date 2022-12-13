@@ -49,6 +49,46 @@
         <activity
             android:name=".util.CameraActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".util.BeerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.BrandyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.EtcActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.FreeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.GinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.LiqueurActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.RumActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.TequilaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.VermouthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.VodkaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.WhiskyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".util.WineActivity"
+            android:exported="false" />
+
+
+
     </application>
 
 
