@@ -1,5 +1,6 @@
 package com.example.cockmate.util;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.camera.core.ImageProxy;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cockmate.R;
 
@@ -59,6 +61,23 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
                 imageView.setImageBitmap(bitmap);
                 TextView textView = findViewById(R.id.label);
                 textView.setText(pred);
+                Button recommend = findViewById(R.id.recipe);
+                recommend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("pred",pred);
+                        recommend.setVisibility(View.GONE);
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                        RecommendedCommunityFragment fragment1= new RecommendedCommunityFragment(); // 객체 생성
+                        fragment1.setArguments(bundle);
+                        transaction.replace(R.id.resultlayout, fragment1); //layout, 교체될 layout
+                        transaction.commit(); //commit으로 저장 하지 않으면 화면 전환이 되지 않음
+
+                    }
+                });
+
             }
         });
     }
