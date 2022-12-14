@@ -365,10 +365,6 @@ public class PostActivity extends AppCompatActivity {
     }
 
     public void saveData(){
-
-        //pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-
-
         postTitle = Title.getText().toString();
         postContent = Content.getText().toString();
         postNameAlcol = Name_alcol.getText().toString();
@@ -376,7 +372,6 @@ public class PostActivity extends AppCompatActivity {
         long date = System.currentTimeMillis();
         String realDate = getTime();
 
-        //loadName();
         // 이름 불러오는 다양한 방법
         UserModel userModel = new UserModel();
         userModel.Load(context);
@@ -387,9 +382,7 @@ public class PostActivity extends AppCompatActivity {
         Log.e(TAG, "UserModel getter : "+userModel.getName());
         Log.e(TAG, "pref에 저장한 이름 : "+userName);
 
-
         board = new HashMap<>();
-
         board.put("Title", postTitle);
         board.put("Category", postCategory);
         board.put("Content", postContent);
@@ -401,7 +394,6 @@ public class PostActivity extends AppCompatActivity {
         board.put("BoardId", documentRef.getId());
         board.put("Alcohol", postNameAlcol);
         board.put("WrittenUserID", user.getUid());
-
 
         // 파이어스토어에 저장하기
         db.collection("Main_Board")
@@ -418,9 +410,6 @@ public class PostActivity extends AppCompatActivity {
                         Log.e(TAG, "게시글 저장 실패");
                     }
                 });
-
-
-
     }
 
 
