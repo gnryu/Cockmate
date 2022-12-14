@@ -4,12 +4,14 @@
     <item
         android:id="@+id/menu_home"
         android:icon="@drawable/home"
-        android:title="HOME" />
+        android:title="HOME"
+        android:fontFamily="@font/eb"/>
 
     <item
         android:id="@+id/menu_community"
         android:icon="@drawable/comment"
-        android:title="COMMUNITY" />
+        android:title="COMMUNITY"
+        android:fontFamily="@font/eb"/>
 
     <!--
 
@@ -22,7 +24,8 @@
     <item
         android:id="@+id/menu_mInfo"
         android:icon="@drawable/user"
-        android:title="INFO" />
+        android:title="INFO"
+        android:fontFamily="@font/eb"/>
 
 </menu>
 

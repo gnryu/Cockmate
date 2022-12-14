@@ -1,6 +1,7 @@
 package com.example.cockmate.util;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +47,8 @@ public class BrandyActivity extends AppCompatActivity {
     private FirebaseUser user;
     ProgressDialog progressDialog;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    GridLayoutManager gridLayoutManager;
+    Context context;
 
     private FirebaseStorage mstorage = FirebaseStorage.getInstance();
     private StorageReference storageRef = mstorage.getReference();
@@ -56,6 +60,7 @@ public class BrandyActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_brandy);
+        context = getApplicationContext();
 
         notice = findViewById(R.id.noticebrandy);
         // 로그인한 정보 가져오기
@@ -143,6 +148,7 @@ public class BrandyActivity extends AppCompatActivity {
                             }
                             //mRecyclerAdapter.updateReceiptsList(mBoardModel);
                             mRecyclerAdapter = new MyRecyclerAdapter(BrandyActivity.this, mBoardModel);
+
 
 
                             // 리사이클러뷰에 데이터 전달

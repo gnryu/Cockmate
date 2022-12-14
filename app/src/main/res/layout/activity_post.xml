@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/color13">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/post_bar"
@@ -26,7 +27,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            >
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,6 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Title"
+                    android:fontFamily="@font/eb"
                     android:textSize="17dp"
                     android:textStyle="bold"
                     android:textColor="@color/color8"
@@ -48,6 +52,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:fontFamily="@font/b"
+                    android:background="@drawable/edittext_background"
+                    android:padding="7dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name of Alcohol"
+                    android:textSize="17dp"
+                    android:fontFamily="@font/eb"
+                    android:textStyle="bold"
+                    android:textColor="@color/color8"
+                    android:layout_margin="10dp"/>
+
+                <EditText
+                    android:id="@+id/post_alcohol_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/b"
+                    android:layout_margin="10dp"
+                    android:padding="7dp"
+                    android:background="@drawable/edittext_background"
                     />
 
             </LinearLayout>
@@ -56,6 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Content"
+                android:fontFamily="@font/eb"
                 android:textSize="17dp"
                 android:textStyle="bold"
                 android:textColor="@color/color8"
@@ -65,7 +101,8 @@
                 android:id="@+id/post_content"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:hint="EX)\n\nWrite the name of the drink and the quantity.\nWrite your recipe."
+                android:hint="Write your recipe."
+                android:fontFamily="@font/b"
                 android:gravity="left"
                 android:background="@drawable/edittext_background"
                 android:layout_marginLeft="10dp"
@@ -78,6 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Select Category"
+                android:fontFamily="@font/eb"
                 android:textStyle="bold"
                 android:textSize="17dp"
                 android:textColor="@color/black"
@@ -89,6 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="only one"
+                android:fontFamily="@font/b"
                 android:textColor="#3C3C3C"
                 android:textSize="12dp"
                 android:layout_marginLeft="10dp"
@@ -111,10 +150,12 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginRight="5dp"
-                        android:text="Vodka" />
+                        android:text="Vodka"
+                        android:fontFamily="@font/eb"/>
                     <Button
                         android:id="@+id/gin"
                         android:text="Gin"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:background="@drawable/click_before"
                         android:layout_marginTop="5dp"
@@ -123,6 +164,7 @@
                     <Button
                         android:id="@+id/whisky"
                         android:text="Whisky"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:background="@drawable/click_before"
 
@@ -130,6 +172,7 @@
                     <Button
                         android:id="@+id/brandy"
                         android:text="Brandy"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:background="@drawable/click_before"
                         android:layout_marginRight="5dp"
@@ -142,6 +185,7 @@
                     <Button
                         android:id="@+id/tequila"
                         android:text="Tequila"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
@@ -151,18 +195,21 @@
                     <Button
                         android:id="@+id/rum"
                         android:text="Rum"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:background="@drawable/click_before"
                         />
                     <Button
                         android:id="@+id/vermouth"
                         android:text="Vermouth"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:background="@drawable/click_before"
                         />
                     <Button
                         android:id="@+id/wine"
                         android:text="Wine"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:background="@drawable/click_before"
                         />
@@ -174,6 +221,7 @@
                     <Button
                         android:id="@+id/liqueur"
                         android:text="Liqueur"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
@@ -184,6 +232,7 @@
                     <Button
                         android:id="@+id/beer"
                         android:text="Beer"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:background="@drawable/click_before"
                         />
@@ -192,12 +241,14 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:text="Non-Alcohol"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:background="@drawable/click_before"
                         />
                     <Button
                         android:id="@+id/etc"
                         android:text="Etc"
+                        android:fontFamily="@font/eb"
                         android:layout_gravity="center"
                         android:background="@drawable/click_before"
                         />
@@ -218,6 +269,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Select a Representative Image"
+                    android:fontFamily="@font/eb"
                     android:textStyle="bold"
                     android:textSize="17dp"
                     android:textColor="@color/black"
@@ -230,6 +282,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Attach\nImage"
+                    android:fontFamily="@font/eb"
                     android:textSize="12dp"
                     android:gravity="center"
                     android:textStyle="bold"

@@ -95,8 +95,8 @@ public class PostActivity extends AppCompatActivity {
 
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    EditText Title, Content;
-    String postTitle, postContent, mName;
+    EditText Title, Content, Name_alcol;
+    String postTitle, postContent, postNameAlcol;
     String postCategory;
     ImageView Image;
     Uri selectedUri;
@@ -170,6 +170,7 @@ public class PostActivity extends AppCompatActivity {
         Title = findViewById(R.id.post_title);
         Content = findViewById(R.id.post_content);
         Image = findViewById(R.id.post_image);
+        Name_alcol = findViewById(R.id.post_alcohol_name);
 
         vodka = findViewById(R.id.vodka);
         gin = findViewById(R.id.gin);
@@ -345,6 +346,7 @@ public class PostActivity extends AppCompatActivity {
                     // UserModel에 저장하기
                     UserModel userModel = new UserModel(name, user.getEmail(), uid);
                     userModel.Save(context);
+                    email = user.getEmail();
 
                     // 바로 SharedPreferences에 저장하기
                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
@@ -369,6 +371,7 @@ public class PostActivity extends AppCompatActivity {
 
         postTitle = Title.getText().toString();
         postContent = Content.getText().toString();
+        postNameAlcol = Name_alcol.getText().toString();
         String category = "main";
         long date = System.currentTimeMillis();
         String realDate = getTime();
@@ -396,6 +399,8 @@ public class PostActivity extends AppCompatActivity {
         board.put("RealDate", realDate);
         board.put("ImageUri", documentRef.getId());
         board.put("BoardId", documentRef.getId());
+        board.put("Alcohol", postNameAlcol);
+        board.put("WrittenUserID", user.getUid());
 
 
         // 파이어스토어에 저장하기
