@@ -380,11 +380,11 @@ public class DetailActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 if(output == 0)
-                                    mCommentCategory = "bitter";
+                                    mCommentCategory = "Bitter";
                                 if(output == 1)
-                                    mCommentCategory = "sour";
+                                    mCommentCategory = "Sour";
                                 if(output == 2)
-                                    mCommentCategory = "sweet";
+                                    mCommentCategory = "Sweet";
                             } else {
                                 Toast.makeText((Context) DetailActivity.this, (CharSequence) "Please check the inputs", Toast.LENGTH_LONG).show();
                             }

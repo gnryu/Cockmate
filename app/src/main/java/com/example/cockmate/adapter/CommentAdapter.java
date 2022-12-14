@@ -43,6 +43,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.commentName.setText(commentModel.commentUserName);
         holder.commentContent.setText(commentModel.commentContent);
         holder.commentRealDate.setText(commentModel.commentRealDate);
+        holder.commentCategory.setText(commentModel.commentFavorCategory);
 
 
     }
@@ -63,6 +64,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         TextView commentName;
         TextView commentContent;
         TextView commentRealDate;
+        TextView commentCategory;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,6 +72,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             commentName = (TextView) itemView.findViewById(R.id.comment_name);
             commentContent = (TextView) itemView.findViewById(R.id.comment_content);
             commentRealDate = (TextView) itemView.findViewById(R.id.comment_date);
+            commentCategory = (TextView) itemView.findViewById(R.id.comment_category);
         }
 
     }
