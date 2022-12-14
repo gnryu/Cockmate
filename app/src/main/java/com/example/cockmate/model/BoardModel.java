@@ -18,6 +18,8 @@ public class BoardModel {
     public int resourceId;
     public String boardEmail;
     public String boardRealDate;
+    public String boardAlcol;
+    public String boardWrittenUserID;
 
     public BoardModel() {
     }
@@ -36,6 +38,8 @@ public class BoardModel {
         result.put("RealDate", boardRealDate);
         result.put("ImageUri", boardImageUrl);
         result.put("BoardId", boardId);
+        result.put("AlcolName", boardAlcol);
+        result.put("WrittenUserID", boardWrittenUserID);
 
         return result;
     }
@@ -43,56 +47,44 @@ public class BoardModel {
     public int getResourceId() {
         return resourceId;
     }
-
     public String getCategory() {
         return boardCategory;
     }
-
     public String getTitle() {
         return boardTitle;
     }
-
     public String getContent(){
         return boardContent;
     }
-
     public long getDate() {
         return boardDate;
     }
-
     public String getEmail() {return boardEmail;}
-
     public String getRealDate() {return boardRealDate;}
-
     public String  getBoardImageUrl() {return  boardImageUrl;}
-
     public String getBoardId() {return  boardId;}
+    public String getBoardAlcol() {return  boardAlcol;}
+    public String getBoardWrittenUserID() {return boardWrittenUserID;}
 
     public void setCategory(String category) {
         this.boardCategory = category;
     }
-
     public void setTitle(String title) {
         this.boardTitle = title;
     }
-
     public void setResourceId(int resourceId) {
         this.resourceId = resourceId;
     }
-
     public void setContent(String content) {
         this.boardContent = content;
     }
-
     public void setDate (long date) {
         this.boardDate = date;
     }
-
     public void setEmail (String email) {this.boardEmail = email;}
-
     public void setRealDate (String realDate) {this.boardRealDate = realDate;}
-
     public void setBoardImageUrl (String  imageUrl) {this.boardImageUrl = imageUrl;}
-
     public void setBoardId (String id) {this.boardId = id;}
+    public void setBoardAlcol (String alcol) {this.boardAlcol = alcol;}
+    public void setBoardWrittenUserID (String writtenUserID) {this.boardWrittenUserID = writtenUserID;}
 }

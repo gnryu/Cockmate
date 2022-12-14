@@ -31,8 +31,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Please Log In"
+                android:fontFamily="@font/eb"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textColor="@color/color7"
                 android:layout_gravity="center"
                 />
@@ -42,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
+                android:fontFamily="@font/eb"
                 android:textStyle="bold"
                 android:textSize="25sp"
                 android:textColor="@color/color7"
@@ -61,6 +63,7 @@
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:text="Name"
+                    android:fontFamily="@font/eb"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="@color/color11"
@@ -71,6 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
+                    android:fontFamily="@font/b"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="@color/color8"
@@ -94,6 +98,7 @@
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:text="Email"
+                    android:fontFamily="@font/eb"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="@color/color11"
@@ -104,6 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
+                    android:fontFamily="@font/b"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="@color/color8"
@@ -118,6 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Go to Log In"
+                android:fontFamily="@font/eb"
                 android:textColor="@color/white"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/login_button"
@@ -129,6 +136,7 @@
                 android:layout_height="wrap_content"
 
                 android:text="Log Out"
+                android:fontFamily="@font/eb"
                 android:textColor="@color/white"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/login_button"
@@ -153,6 +161,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Don't have an account?"
+                android:fontFamily="@font/b"
                 />
 
             <TextView
@@ -162,6 +171,7 @@
                 android:gravity="center_horizontal"
                 android:textColor="@color/color9"
                 android:text="Sigh Up"
+                android:fontFamily="@font/eb"
                 android:textStyle="bold"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="70dp"/>

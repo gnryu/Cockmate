@@ -7,7 +7,7 @@
         android:width="1dp"
         android:color="@color/color9" />
 
-    <solid android:color="@color/color13" />
+    <solid android:color="@color/color3" />
 
     <corners android:radius="5dp" />
 </shape>

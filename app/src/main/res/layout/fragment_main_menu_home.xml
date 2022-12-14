@@ -1,32 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".util.MainMenuHomeFragment">
+    android:orientation="vertical"
+    tools:context=".util.LoginActivity">
 
-    <LinearLayout
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center" >
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        >
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COCKMATE"
+            android:fontFamily="@font/eb"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:textColor="@color/color7"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="20dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/login_fragment_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_margin="30dp"
-            android:text="Home"
-            android:textSize="40dp" />
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
-            android:id="@+id/find_alcoh_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="주류찾기" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Corkmate automatically recognizes your alcohol when you take a picture of it and tells you the name of it.
+\n\nIt also finds and shows cocktail recipes with the alcohol in the community.\n\nWhen a user leaves a review on a post, we provide a taste-based categorization through text analysis."
+                android:textStyle="normal"
+                android:fontFamily="@font/b"
+                android:textSize="16sp"
+                android:textColor="@color/color8"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                />
 
-</FrameLayout>
+            <Button
+                android:id="@+id/find_alcoh_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Find the name of alcohol"
+                android:fontFamily="@font/eb"
+                android:textColor="@color/white"
+                android:layout_marginTop="60dp"
+                android:background="@drawable/login_button"
+                />
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</LinearLayout>
+
+

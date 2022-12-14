@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +49,7 @@ public class MainMenuCommunityFragment extends Fragment {
     private FirebaseUser user;
     ProgressDialog progressDialog;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    GridLayoutManager gridLayoutManager;
 
     private FirebaseStorage mstorage = FirebaseStorage.getInstance();
     private StorageReference storageRef = mstorage.getReference();
@@ -272,12 +274,16 @@ public class MainMenuCommunityFragment extends Fragment {
                             bmodel.boardTitle = (String) ds.get("Title");
                             bmodel.boardImageUrl = imaUri;
                             bmodel.boardId = (String) ds.get("BoardId");
+                            bmodel.boardAlcol = (String) ds.get("Alcohol");
+                            bmodel.boardWrittenUserID = (String) ds.get("WrittenUserID");
 
                             mBoardModel.add(bmodel);
 
                         }
                         //mRecyclerAdapter.updateReceiptsList(mBoardModel);
                         mRecyclerAdapter = new MyRecyclerAdapter(getActivity(), mBoardModel);
+                        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+                        mRecyclerView.setLayoutManager(gridLayoutManager);
 
 
                         // 리사이클러뷰에 데이터 전달

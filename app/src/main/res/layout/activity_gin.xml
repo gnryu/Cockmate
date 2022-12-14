@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="There are no posts yet.."
+        android:fontFamily="@font/b"
         android:textColor="#3C3C3C"
         android:textSize="15dp"
         android:layout_gravity="center"

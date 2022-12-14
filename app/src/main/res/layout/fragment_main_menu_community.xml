@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/color13">
 
 
     <!--
@@ -32,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Base Category"
+            android:fontFamily="@font/eb"
             android:textSize="20dp"
             android:textColor="@color/color8"
             android:layout_gravity="center"
@@ -113,6 +115,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="VODKA"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"
                     android:layout_marginBottom="8dp"/>
 
@@ -152,6 +156,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="GIN"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -190,6 +196,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="WHISKY"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -228,6 +236,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="BRANDY"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -266,6 +276,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TEQUILA"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -304,6 +316,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="RUM"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -342,6 +356,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="WINE"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -380,6 +396,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="LIQUEUR"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -418,6 +436,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="VERMOUTH"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -456,6 +476,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="BEER"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -494,6 +516,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="FREE"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -532,6 +556,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ETC"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/b"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
@@ -553,6 +579,7 @@
         android:layout_height="wrap_content"
         android:text="Recently"
         android:textSize="20dp"
+        android:fontFamily="@font/eb"
         android:textColor="@color/color8"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"

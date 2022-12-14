@@ -6,6 +6,7 @@
     <item
         android:id="@+id/post_complete"
         android:title="Add"
+        android:fontFamily="@font/eb"
         app:showAsAction="ifRoom"/>
 
 </menu>

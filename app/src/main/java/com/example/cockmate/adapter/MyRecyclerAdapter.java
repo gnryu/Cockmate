@@ -115,6 +115,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         String myBoardRealDate = boardModel.boardRealDate;
         String myBoardName = boardModel.boardName;
         String myBoardId = boardModel.boardId;
+        String myBoardAlcol = boardModel.boardAlcol;
+        String myBoardWrittenUserID = boardModel.boardWrittenUserID;
+
+        //Log.e(TAG, myBoardAlcol);
+        //Log.e(TAG, myBoardWrittenUserID);
 
 
         // 위 정보를 순서대로 array에 저장하기
@@ -126,6 +131,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         boardInfo.add(myBoardName);
         boardInfo.add(myBoardImageUri);
         boardInfo.add(myBoardId);
+        boardInfo.add(myBoardAlcol);
+        boardInfo.add(myBoardWrittenUserID);
 
 
 
