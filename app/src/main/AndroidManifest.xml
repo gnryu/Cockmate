@@ -86,7 +86,10 @@
         <activity
             android:name=".util.WineActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".util.ObjectDetectionActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
 
 
     </application>

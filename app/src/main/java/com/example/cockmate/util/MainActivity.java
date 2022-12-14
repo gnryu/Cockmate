@@ -18,6 +18,8 @@ import com.example.cockmate.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
+import org.pytorch.LiteModuleLoader;
+import org.pytorch.Module;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,8 +39,26 @@ public class MainActivity extends AppCompatActivity {
     private MainMenuInfoFragment fragmentInfo = new MainMenuInfoFragment();
 
     private BottomNavigationView bottomNavigationView;
+    private Module mModule = null;
+    //asset file access ( model weight )
+    public static String assetFilePath(Context context, String assetName) throws IOException {
+        File file = new File(context.getFilesDir(), assetName);
+        if (file.exists() && file.length() > 0) {
+            return file.getAbsolutePath();
+        }
 
-
+        try (InputStream is = context.getAssets().open(assetName)) {
+            try (OutputStream os = new FileOutputStream(file)) {
+                byte[] buffer = new byte[4 * 1024];
+                int read;
+                while ((read = is.read(buffer)) != -1) {
+                    os.write(buffer, 0, read);
+                }
+                os.flush();
+            }
+            return file.getAbsolutePath();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +82,20 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.menu_bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.menu_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
+        try {
+            mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "yolov5s.torchscript.ptl"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("classes.txt")));
+            String line;
+            List<String> classes = new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                classes.add(line);
+            }
+            PrePostProcessor.mClasses = new String[classes.size()];
+            classes.toArray(PrePostProcessor.mClasses);
+        } catch (IOException e) {
+            Log.e("Object Detection", "Error reading assets", e);
+            finish();
+        }
 
 
     }
