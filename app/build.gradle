@@ -81,4 +81,13 @@ dependencies {
     implementation 'org.pytorch:pytorch_android_lite:1.10.0'
     implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
 
+    // komoran - 형태소 분석
+    implementation('com.github.shin285:KOMORAN:3.3.4') {
+        exclude group: 'com.github.shineware', module: 'commons'
+        exclude group: 'com.github.shineware', module: 'aho-corasick'
+    }
+
+    // onnxruntime
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:latest.release'
+
 }

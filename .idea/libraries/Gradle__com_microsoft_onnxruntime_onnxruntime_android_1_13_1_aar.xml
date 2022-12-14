@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.microsoft.onnxruntime:onnxruntime-android:1.13.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/d3229eacde1a23fc4914424acc7d1195/transformed/jetified-onnxruntime-android-1.13.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d3229eacde1a23fc4914424acc7d1195/transformed/jetified-onnxruntime-android-1.13.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d3229eacde1a23fc4914424acc7d1195/transformed/jetified-onnxruntime-android-1.13.1/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.microsoft.onnxruntime/onnxruntime-android/1.13.1/8fa4efd9e826a3bd27b18749396fe78d49a8c49d/onnxruntime-android-1.13.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.microsoft.onnxruntime/onnxruntime-android/1.13.1/a1e48eb9f58af0005b3e63b1484de100d99fc816/onnxruntime-android-1.13.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
