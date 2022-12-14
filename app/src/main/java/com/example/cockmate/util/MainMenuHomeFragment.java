@@ -24,7 +24,7 @@ public class MainMenuHomeFragment extends Fragment {
         findAlcohBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CameraActivity.class);
+                Intent intent = new Intent(getActivity(), ObjectDetectionActivity.class);
                 startActivity(intent);
             }
         });
