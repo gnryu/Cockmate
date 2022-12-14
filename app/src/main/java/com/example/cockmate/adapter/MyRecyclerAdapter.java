@@ -118,10 +118,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         String myBoardAlcol = boardModel.boardAlcol;
         String myBoardWrittenUserID = boardModel.boardWrittenUserID;
 
-        //Log.e(TAG, myBoardAlcol);
-        //Log.e(TAG, myBoardWrittenUserID);
-
-
         // 위 정보를 순서대로 array에 저장하기
         ArrayList<String> boardInfo = new ArrayList<>();
         boardInfo.add(myBoardTitle);
@@ -134,11 +130,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         boardInfo.add(myBoardAlcol);
         boardInfo.add(myBoardWrittenUserID);
 
-
-
         // Detail Activity에 넘겨주기
-        //BoardModel data = mBoardModel.get(position);
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
