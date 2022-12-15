@@ -45,6 +45,8 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
     Bitmap bitmap;
     Bitmap resizedBitmap;
     ArrayList<Result> results;
+    Bitmap resultB;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -52,19 +54,48 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
         take_photo = findViewById(R.id.take_photoes);
         take_photo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
 
-                String pred = classifier.predict(bitmap);
-                Log.e("prediction", pred);
+            public void onClick(View view) {
+                try{
+                    Result result = results.get(0);
+                    Log.d("T","TTTT");
+                    int x = (int)(result.rect.left*0.44);
+                    int y =(int)(result.rect.top*0.27);
+                    int a = (int) (result.rect.width()*0.44);
+                    int b = (int) (result.rect.height()*0.27);
+                    Log.d("TTT",String.valueOf(x));
+                    Log.d("TTT",String.valueOf(y));
+                    Bitmap cropped_Bitmap = Bitmap.createBitmap(bitmap,
+                            x,
+                            y,
+                            a,
+                            b);
+
+                    pred = classifier.predict(cropped_Bitmap);
+                    Log.e("prediction", pred);
+                    resultB = cropped_Bitmap.createScaledBitmap(cropped_Bitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);;
+
+                }
+                catch(Exception e){
+                    pred = classifier.predict(bitmap);
+                    Log.e("prediction", pred);
+                    resultB = bitmap;
+                }
+
+
                 setContentView(R.layout.activity_result);
                 ImageView imageView = findViewById(R.id.image);
-                imageView.setImageBitmap(bitmap);
+                imageView.setImageBitmap(resultB);
                 TextView textView = findViewById(R.id.label);
                 textView.setText(pred);
+
                 Button recommend = findViewById(R.id.recipe);
+
                 recommend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+
                         Bundle bundle = new Bundle();
                         bundle.putString("pred",pred);
                         recommend.setVisibility(View.GONE);
