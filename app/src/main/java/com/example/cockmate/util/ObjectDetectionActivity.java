@@ -37,7 +37,8 @@ import java.util.ArrayList;
 
 public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetectionActivity.AnalysisResult> {
 
-    Classifier classifier;
+    Classifier raw_classifier;
+    Classifier cropped_classifier;
     private Module mModule = null;
     private ResultView mResultView;
     String pred = "예측";
@@ -50,7 +51,8 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        classifier = new Classifier(Utils.assetFilePath(this,"ef.ptl"));
+        raw_classifier = new Classifier(Utils.assetFilePath(this,"ef.ptl"));
+        cropped_classifier = new Classifier(Utils.assetFilePath(this,"efc.ptl"));
         take_photo = findViewById(R.id.take_photoes);
         take_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,13 +73,13 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
                             a,
                             b);
 
-                    pred = classifier.predict(cropped_Bitmap);
+                    pred = cropped_classifier.predict(cropped_Bitmap);
                     Log.e("prediction", pred);
                     resultB = cropped_Bitmap.createScaledBitmap(cropped_Bitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);;
 
                 }
                 catch(Exception e){
-                    pred = classifier.predict(bitmap);
+                    pred = raw_classifier.predict(bitmap);
                     Log.e("prediction", pred);
                     resultB = bitmap;
                 }
